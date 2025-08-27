@@ -6,17 +6,19 @@
   <title>SquishEyez NFT Collection</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
   <style>
-    :root{
-      --neon:#33ff99;
-      --mag:#ff00ff;
-      --cyan:#00ffff;
-      --bg:#0d0d0d;
-      --panel:#111;
-      --text:#bdf9e7;
+    :root {
+      --neon: #33ff99;
+      --mag: #ff00ff;
+      --cyan: #00ffff;
+      --bg: #0d0d0d;
+      --panel: #111;
+      --text: #bdf9e7;
     }
+
     body {
       font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       background: var(--bg);
       color: var(--neon);
       position: relative;
@@ -30,8 +32,8 @@
       inset: 0;
       background: repeating-linear-gradient(
         to bottom,
-        rgba(0,0,0,0.15) 0px,
-        rgba(0,0,0,0.15) 2px,
+        rgba(0, 0, 0, 0.15) 0px,
+        rgba(0, 0, 0, 0.15) 2px,
         transparent 2px,
         transparent 4px
       );
@@ -73,7 +75,7 @@
       border-radius: 10px;
       padding: 20px;
       margin-bottom: 25px;
-      box-shadow: 0 0 20px rgba(0,255,200,0.35);
+      box-shadow: 0 0 20px rgba(0, 255, 200, 0.35);
     }
 
     .stats {
@@ -113,7 +115,7 @@
       border-radius: 8px;
       transition: transform 0.2s, box-shadow 0.2s;
       image-rendering: pixelated;
-      background:#000;
+      background: #000;
     }
     .gallery-grid img:hover {
       transform: scale(1.05) rotate(-2deg);
@@ -141,7 +143,8 @@
     /* Music Button */
     #music-control {
       position: absolute;
-      top: 20px; right: 20px;
+      top: 20px;
+      right: 20px;
       background: #111;
       border: 2px solid var(--neon);
       color: var(--neon);
@@ -157,22 +160,27 @@
 
     /* Intro Screen */
     #intro-screen {
-      position: fixed; inset: 0;
+      position: fixed;
+      inset: 0;
       background: #000;
-      display: flex; align-items: center; justify-content: center; flex-direction: column;
-      color: var(--neon); z-index: 2000;
-      text-align:center;
-      padding:24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: var(--neon);
+      z-index: 2000;
+      text-align: center;
+      padding: 24px;
     }
     #intro-screen h1 { font-size: 24px; margin-bottom: 20px; }
     #press-start { animation: flicker 1.5s infinite; }
-    .start-hint{color:#9fffe0;font-size:12px;margin-top:10px;opacity:.8}
+    .start-hint { color: #9fffe0; font-size: 12px; margin-top: 10px; opacity: .8; }
   </style>
 </head>
 <body>
 
   <!-- INTRO / PRESS START -->
-  <div id="intro-screen">
+  <div id="intro-screen" role="button" aria-label="Enter site">
     <h1>★ SQUISHEYEZ ★</h1>
     <p id="press-start">PRESS START</p>
     <p class="start-hint">(click anywhere to enter)</p>
@@ -180,33 +188,40 @@
 
   <!-- HEADER -->
   <header style="display:none;">
-    <img src="https://pbs.twimg.com/profile_images/1788039407741648896/TtNCpsSt.jpg" alt="SquishEyez Logo">
+    <img src="https://pbs.twimg.com/profile_images/1788039407741648896/TtNCpsSt.jpg" alt="SquishEyez logo">
     <h1>SquishEyez NFT Collection</h1>
-    <button id="music-control">MUTE</button>
+    <button id="music-control" aria-pressed="false" aria-label="Toggle music">MUTE</button>
   </header>
 
   <!-- ABOUT -->
   <section class="block description" style="display:none;">
     <h2>About SquishEyez</h2>
-    <p><strong>Welcome to the SquishEyez Universe!</strong> A playful NFT collection on the WAX blockchain featuring charming, slime-like avatars infused with vibrant personality. What began as single-pixel creatures has evolved into an expressive and collectible art series..Take custody of a Squisheye today! A forgotten civilization that began life as single pixel organisms, have now found refuge in the digital world. Their story is one of rebirth and survival in the face of technological advancement.
+    <p>
+      <strong>Welcome to the SquishEyez universe!</strong> A playful NFT collection on the WAX blockchain, SquishEyez features
+      charming, slime-like avatars with big personality. What began as single-pixel creatures has evolved into an expressive,
+      collectible art series. Take custody of a SquishEye today.
+    </p>
 
-Origins:
+    <p><strong>Origins.</strong> In a distant corner of the Squishiverse, a species called <em>Quisheyezz</em> emerged from a cosmic
+      event known as the Big Squish. Starting as single-pixel organisms, they adapted to a realm where physics was as flexible
+      as their forms—until their universe began to collapse into larger cosmic forces.</p>
 
-In a distant galaxy, within the expansive Squishiverse, a species named Quisheyezz evolved from the remnants of a cosmic event known as the Big Squish. These beings, initially as simple as single pixel organisms, thrived in an environment where the laws of physics were as malleable as their own squishy forms. However, their existence was threatened as their universe began to converge with larger cosmic forces.
+    <p><strong>The Great Migration.</strong> As the Squishiverse contracted, the last 69 originals—now known as <em>Squisheyez</em>—sought
+      refuge on Earth. In the early 1990s they slipped into the burgeoning digital world, nesting inside DOS systems and
+      “borrowing” the eyes of video-game characters to explore and map their new home.</p>
 
-The Great Migration:
+    <p><strong>Survival in the Digital Age.</strong> The leap from 2D pixels to 3D polygons—“Polygonz”—threatened their existence.
+      Resilient as ever, they found permanence on the WAX blockchain, minting themselves as <em>ssquisheyezz</em> to outlive
+      hardware and format shifts.</p>
 
-As the Squishiverse contracted, these pixel-like creatures sought survival through migration. In the early 1990s, the remaining 69 original Quisheyezz, now known as Squisheyez, found refuge on Earth. They integrated themselves into the burgeoning digital world, particularly into the DOS operating systems of early computers. Here, they learned to survive and even thrive by manipulating the digital eyes of video game characters, using them to explore and map the digital landscape.
+    <p><strong>The SSQuisheyezz Mission.</strong> Today, each SSQuisheyezz seeks a new host to help it evolve. Collectors join a
+      community dedicated to preserving the species and advancing their story through a DAO-driven ecosystem.</p>
 
-Survival in the Digital Age:
-
-The Squisheyez faced new challenges with the advent of advanced graphics technology. Their once safe 2D pixel existence was threatened by the rise of 3D polygons and CGI, which they referred to as 'Polygonz'. However, their resilience and adaptability led them to a new home in the realm of NFTs on the WAX blockchain, where they could exist without the fear of technological obsolescence. By creating and minting themselves as "ssquisheyezz," they ensured their continued existence in the digital world.
-
-The SSQuisheyezz Mission:
-
-Now, these digital beings not only survive but aim to evolve. Each SSQuisheyezz seeks new hosts to foster their growth, offering collectors a unique opportunity to be part of this evolutionary journey. Owners of these NFTs join the Squisheyez in their mission to propagate and preserve their species, forming part of a decentralized autonomous organization dedicated to safeguarding their future.
-</p>
-    <p>Created by artist <strong>@buttzwithaZ</strong>, the collection blends DOS-era graphics, trading-card aesthetics, and 8-bit nostalgia with modern digital art. Season one introduced 69 unique 1/1 SquishEyez; new seasons expand the universe through interactive blends, exclusive drops, and community events.</p>
+    <p>
+      Created by artist <strong>@buttzwithaZ</strong>, SquishEyez blends DOS-era graphics, trading-card vibes, and 8-bit nostalgia
+      with modern digital art. Season one introduced 69 unique 1/1s; new seasons expand the universe with interactive blends,
+      curated drops, and community events.
+    </p>
   </section>
 
   <!-- STATS -->
@@ -220,18 +235,18 @@ Now, these digital beings not only survive but aim to evolve. Each SSQuisheyezz 
   <section class="block gallery" style="display:none;">
     <h2>SquishEyez Showcase</h2>
     <div class="gallery-grid">
-      <!-- 1) Sk8Coin SquishEyez Deck image (from earlier) -->
-      <img src="https://ipfs.neftyblocks.io/ipfs/Qme3gS6qP3xTvhri5aWNfhZQeWgS5WJfsSTnYmaYfawuHL" alt="Sk8Coin SquishEyez Deck">
+      <!-- 1) Sk8Coin SquishEyez Deck -->
+      <img src="https://ipfs.neftyblocks.io/ipfs/Qme3gS6qP3xTvhri5aWNfhZQeWgS5WJfsSTnYmaYfawuHL" alt="Sk8Coin SquishEyez deck">
 
-      <!-- 2..9) The eight new ssquisheyezz images you provided -->
-      <img src="https://ipfs.neftyblocks.io/ipfs/QmNjE4zmvTh6SK6yusTspi4cgNqKkgCoz2Mc25VCruh8Ud" alt="SquishEyez Asset 2">
-      <img src="https://ipfs.neftyblocks.io/ipfs/QmWFFMCmLiqmz9AkQF4nyzNKiR12GXFGdbjBqFEqzkyTc6" alt="SquishEyez Asset 3">
-      <img src="https://ipfs.neftyblocks.io/ipfs/QmVMRAcFY15UNbbvDf3NNUHoN3RvCRNcsT8gNttUaR9ony" alt="SquishEyez Asset 4">
-      <img src="https://ipfs.neftyblocks.io/ipfs/QmRSkAy4M4GUiVDxsiif3DH86hzir8Jk4wCGZpDTeL1nC7" alt="SquishEyez Asset 5">
-      <img src="https://ipfs.neftyblocks.io/ipfs/QmUq61ZJgy2mkYQy6VWQ9o86Ek8XexyiZPTBpA3CKYA9j1" alt="SquishEyez Asset 6">
-      <img src="https://ipfs.neftyblocks.io/ipfs/QmctzxUsSuTiie6tAtmmvSEzaEnxa6bk3uECNzzNQNz5jS" alt="SquishEyez Asset 7">
-      <img src="https://ipfs.neftyblocks.io/ipfs/QmWCBLTPZFPCKc5ZTNTCoftB5eKNae5aAdJpb7gUpnVhG9" alt="SquishEyez Asset 8">
-      <img src="https://ipfs.neftyblocks.io/ipfs/QmW37YUasmF21gcp4w4u5EUdD2Z8cyyedwjavGYHsjTq3Y" alt="SquishEyez Asset 9">
+      <!-- 2..9) Eight ssquisheyezz assets -->
+      <img src="https://ipfs.neftyblocks.io/ipfs/QmNjE4zmvTh6SK6yusTspi4cgNqKkgCoz2Mc25VCruh8Ud" alt="SquishEyez asset 2">
+      <img src="https://ipfs.neftyblocks.io/ipfs/QmWFFMCmLiqmz9AkQF4nyzNKiR12GXFGdbjBqFEqzkyTc6" alt="SquishEyez asset 3">
+      <img src="https://ipfs.neftyblocks.io/ipfs/QmVMRAcFY15UNbbvDf3NNUHoN3RvCRNcsT8gNttUaR9ony" alt="SquishEyez asset 4">
+      <img src="https://ipfs.neftyblocks.io/ipfs/QmRSkAy4M4GUiVDxsiif3DH86hzir8Jk4wCGZpDTeL1nC7" alt="SquishEyez asset 5">
+      <img src="https://ipfs.neftyblocks.io/ipfs/QmUq61ZJgy2mkYQy6VWQ9o86Ek8XexyiZPTBpA3CKYA9j1" alt="SquishEyez asset 6">
+      <img src="https://ipfs.neftyblocks.io/ipfs/QmctzxUsSuTiie6tAtmmvSEzaEnxa6bk3uECNzzNQNz5jS" alt="SquishEyez asset 7">
+      <img src="https://ipfs.neftyblocks.io/ipfs/QmWCBLTPZFPCKc5ZTNTCoftB5eKNae5aAdJpb7gUpnVhG9" alt="SquishEyez asset 8">
+      <img src="https://ipfs.neftyblocks.io/ipfs/QmW37YUasmF21gcp4w4u5EUdD2Z8cyyedwjavGYHsjTq3Y" alt="SquishEyez asset 9">
     </div>
   </section>
 
@@ -240,77 +255,77 @@ Now, these digital beings not only survive but aim to evolve. Each SSQuisheyezz 
     <h2>$SQUISH</h2>
 
     <div class="link-item">
-      <a href="https://eosauthority.com/tokens/ribbitartwrk/SQUISH?network=wax" target="_blank">$SQUISH on EOS Authority (Token Explorer)</a>
-      <p class="link-desc">View on-chain token info for <strong>$SQUISH</strong> on WAX (contract: <em>ribbitartwrk</em>): supply, holder distribution, transfers, and contract details.</p>
+      <a href="https://eosauthority.com/tokens/ribbitartwrk/SQUISH?network=wax" target="_blank" rel="noopener">$SQUISH on EOS Authority (Token Explorer)</a>
+      <p class="link-desc">On-chain details for <strong>$SQUISH</strong> on WAX (contract: <em>ribbitartwrk</em>): supply, holders, transfers, and contract info.</p>
     </div>
 
     <div class="link-item">
-      <a href="https://waxdao.io/blends/1775" target="_blank">WaxDAO Blend #1775 — Unwrap 69× $SQUISH NFT</a>
-      <p class="link-desc">Use this blend to <strong>unwrap</strong> the special NFT that represents <strong>69× $SQUISH</strong> and receive the underlying <strong>$SQUISH tokens</strong> back to your wallet.</p>
+      <a href="https://waxdao.io/blends/1775" target="_blank" rel="noopener">WaxDAO Blend #1775 — Unwrap 69× $SQUISH NFT</a>
+      <p class="link-desc">Unwrap the NFT representing <strong>69× $SQUISH</strong> and receive the underlying tokens back to your wallet.</p>
     </div>
 
     <div class="link-item">
-      <a href="https://waxdao.io/blends/1718" target="_blank">WaxDAO Blend #1718 — Wrap 69× $SQUISH into an NFT</a>
-      <p class="link-desc">Use this blend to <strong>wrap</strong> <strong>69× $SQUISH tokens</strong> into a single <strong>$SQUISH NFT</strong>, making it easy to trade or hold as a collectible.</p>
+      <a href="https://waxdao.io/blends/1718" target="_blank" rel="noopener">WaxDAO Blend #1718 — Wrap 69× $SQUISH into an NFT</a>
+      <p class="link-desc">Wrap <strong>69× $SQUISH</strong> into a single NFT for easy trading or collecting.</p>
     </div>
   </section>
 
-  <!-- BLENDS, DROPS & FARMS (all original links preserved) -->
+  <!-- BLENDS, DROPS & FARMS -->
   <section class="block blends-drops" style="display:none;">
     <h2>Blends, Drops & Farms</h2>
 
     <h3>Blends (WaxDAO)</h3>
-    <p class="link-desc">These blends combine Season 2 Shardz and Diskettez to craft specific SquisheyeZ pieces/styles. Open each link to view the live inputs/outputs.</p>
+    <p class="link-desc">Season 2 Shardz + Diskettez craft specific SquishEyez pieces/styles. Open for live inputs/outputs.</p>
     <ul>
-      <li class="link-item"><a href="https://waxdao.io/blends/1876" target="_blank">Piece: V9.0 / Style: Doodlez</a><div class="link-desc">Craft the V9.0 Doodlez variant by submitting the required shard set.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1875" target="_blank">Piece: V9.0 / Style: Pixelz</a><div class="link-desc">Blend shards into the V9.0 Pixelz piece.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1874" target="_blank">Piece: V8.0 / Style: Pixelz</a><div class="link-desc">Blend for V8.0 Pixelz output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1873" target="_blank">Piece: V8.0 / Style: Doodlez</a><div class="link-desc">Blend for V8.0 Doodlez output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1872" target="_blank">Piece: V7.0 / Style: Doodlez</a><div class="link-desc">Blend for V7.0 Doodlez output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1871" target="_blank">Piece: V7.0 / Style: Pixelz</a><div class="link-desc">Blend for V7.0 Pixelz output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1870" target="_blank">Piece: V6.0 / Style: Pixelz</a><div class="link-desc">Blend for V6.0 Pixelz output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1869" target="_blank">Piece: V6.0 / Style: Doodlez</a><div class="link-desc">Blend for V6.0 Doodlez output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1868" target="_blank">Piece: V5.0 / Style: Doodlez</a><div class="link-desc">Blend for V5.0 Doodlez output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1865" target="_blank">Piece: V5.0 / Style: Pixelz</a><div class="link-desc">Blend for V5.0 Pixelz output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1850" target="_blank">Piece: V4.0 / Style: Doodlez</a><div class="link-desc">Blend for V4.0 Doodlez output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1849" target="_blank">Piece: V4.0 / Style: Pixelz</a><div class="link-desc">Blend for V4.0 Pixelz output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1848" target="_blank">Piece: V3.0 / Style: Doodlez</a><div class="link-desc">Blend for V3.0 Doodlez output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1847" target="_blank">Piece: V3.0 / Style: Pixelz</a><div class="link-desc">Blend for V3.0 Pixelz output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1846" target="_blank">Piece: V2.0 / Style: Doodlez</a><div class="link-desc">Blend for V2.0 Doodlez output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1845" target="_blank">Piece: V2.0 / Style: Pixelz</a><div class="link-desc">Blend for V2.0 Pixelz output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1844" target="_blank">Piece: V1.0 / Style: Doodlez</a><div class="link-desc">Blend for V1.0 Doodlez output.</div></li>
-      <li class="link-item"><a href="https://waxdao.io/blends/1843" target="_blank">Piece: V1.0 / Style: Pixelz</a><div class="link-desc">Blend for V1.0 Pixelz output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1876" target="_blank" rel="noopener">Piece: V9.0 / Style: Doodlez</a><div class="link-desc">Craft the V9.0 Doodlez variant.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1875" target="_blank" rel="noopener">Piece: V9.0 / Style: Pixelz</a><div class="link-desc">Blend shards into the V9.0 Pixelz piece.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1874" target="_blank" rel="noopener">Piece: V8.0 / Style: Pixelz</a><div class="link-desc">Blend for V8.0 Pixelz output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1873" target="_blank" rel="noopener">Piece: V8.0 / Style: Doodlez</a><div class="link-desc">Blend for V8.0 Doodlez output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1872" target="_blank" rel="noopener">Piece: V7.0 / Style: Doodlez</a><div class="link-desc">Blend for V7.0 Doodlez output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1871" target="_blank" rel="noopener">Piece: V7.0 / Style: Pixelz</a><div class="link-desc">Blend for V7.0 Pixelz output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1870" target="_blank" rel="noopener">Piece: V6.0 / Style: Pixelz</a><div class="link-desc">Blend for V6.0 Pixelz output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1869" target="_blank" rel="noopener">Piece: V6.0 / Style: Doodlez</a><div class="link-desc">Blend for V6.0 Doodlez output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1868" target="_blank" rel="noopener">Piece: V5.0 / Style: Doodlez</a><div class="link-desc">Blend for V5.0 Doodlez output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1865" target="_blank" rel="noopener">Piece: V5.0 / Style: Pixelz</a><div class="link-desc">Blend for V5.0 Pixelz output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1850" target="_blank" rel="noopener">Piece: V4.0 / Style: Doodlez</a><div class="link-desc">Blend for V4.0 Doodlez output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1849" target="_blank" rel="noopener">Piece: V4.0 / Style: Pixelz</a><div class="link-desc">Blend for V4.0 Pixelz output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1848" target="_blank" rel="noopener">Piece: V3.0 / Style: Doodlez</a><div class="link-desc">Blend for V3.0 Doodlez output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1847" target="_blank" rel="noopener">Piece: V3.0 / Style: Pixelz</a><div class="link-desc">Blend for V3.0 Pixelz output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1846" target="_blank" rel="noopener">Piece: V2.0 / Style: Doodlez</a><div class="link-desc">Blend for V2.0 Doodlez output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1845" target="_blank" rel="noopener">Piece: V2.0 / Style: Pixelz</a><div class="link-desc">Blend for V2.0 Pixelz output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1844" target="_blank" rel="noopener">Piece: V1.0 / Style: Doodlez</a><div class="link-desc">Blend for V1.0 Doodlez output.</div></li>
+      <li class="link-item"><a href="https://waxdao.io/blends/1843" target="_blank" rel="noopener">Piece: V1.0 / Style: Pixelz</a><div class="link-desc">Blend for V1.0 Pixelz output.</div></li>
     </ul>
 
     <h3>Drops</h3>
     <ul>
       <li class="link-item">
-        <a href="https://nfthive.io/drop/8687" target="_blank">Season 2 Shard Packz (NFTHive)</a>
-        <div class="link-desc">Official Season 2 shard pack drop for crafting SquisheyeZ via blends (Pixelz vs. Doodlez styles). Check live availability/pricing on the page.</div>
+        <a href="https://nfthive.io/drop/8687" target="_blank" rel="noopener">Season 2 Shard Packz (NFTHive)</a>
+        <div class="link-desc">Official shard packs for crafting SquishEyez via blends (Pixelz vs. Doodlez styles). Availability and pricing on page.</div>
       </li>
       <li class="link-item">
-        <a href="https://nfthive.io/drop/8693" target="_blank">Blend Diskettez (NFTHive)</a>
-        <div class="link-desc">Diskettez required to process shard blends. See the drop page for current supply and cost.</div>
+        <a href="https://nfthive.io/drop/8693" target="_blank" rel="noopener">Blend Diskettez (NFTHive)</a>
+        <div class="link-desc">Diskettez required to run shard blends. See live supply and cost.</div>
       </li>
       <li class="link-item">
-        <a href="https://nfthive.io/drop/10860" target="_blank">SquishTrialZ (NFTHive)</a>
-        <div class="link-desc">Limited “trial” 1/1 SquishArtZ pieces. Visit to see units, price, and status.</div>
+        <a href="https://nfthive.io/drop/10860" target="_blank" rel="noopener">SquishTrialZ (NFTHive)</a>
+        <div class="link-desc">Limited 1/1 SquishArtZ “trial” pieces. Units, price, and status listed on page.</div>
       </li>
       <li class="link-item">
-        <a href="https://neftyblocks.com/collection/skatecoinwax/drops/228566" target="_blank">Sk8Coin: SquishEyez Deck Drop (NeftyBlocks)</a>
-        <div class="link-desc">A deck component used to craft a complete skateboard within the Sk8Coin system; page shows pricing and supply. Keep an eye on availability.</div>
+        <a href="https://neftyblocks.com/collection/skatecoinwax/drops/228566" target="_blank" rel="noopener">Sk8Coin: SquishEyez Deck Drop (NeftyBlocks)</a>
+        <div class="link-desc">Deck component for Sk8Coin crafting. Check pricing and supply.</div>
       </li>
     </ul>
 
     <h3>Farms (WaxDAO)</h3>
     <ul>
       <li class="link-item">
-        <a href="https://waxdao.io/farm/squish2.exe" target="_blank">Squish2.exe Farm</a>
-        <div class="link-desc">Stake eligible “floppy” assets & related NFTs to earn a small amount of $SQUISH. Open for current rates and eligibility.</div>
+        <a href="https://waxdao.io/farm/squish2.exe" target="_blank" rel="noopener">Squish2.exe Farm</a>
+        <div class="link-desc">Stake eligible “floppy” assets & related NFTs to earn $SQUISH. See current rates and eligibility.</div>
       </li>
       <li class="link-item">
-        <a href="https://waxdao.io/v2/farm/squish.bat" target="_blank">Squish.bat Farm</a>
-        <div class="link-desc">Stake OG Squisheyez (schema “squisheyezs1”) and check the farm UI for the present daily earning rate and requirements.</div>
+        <a href="https://waxdao.io/v2/farm/squish.bat" target="_blank" rel="noopener">Squish.bat Farm</a>
+        <div class="link-desc">Stake OG Squisheyez (schema “squisheyezs1”). Daily rate and requirements in the UI.</div>
       </li>
     </ul>
   </section>
@@ -320,38 +335,38 @@ Now, these digital beings not only survive but aim to evolve. Each SSQuisheyezz 
     <h2>Explore SquishEyez</h2>
 
     <div class="link-item">
-      <a href="https://neftyblocks.com/collection/ssquisheyezz" target="_blank">SquishEyez on NeftyBlocks</a>
-      <p class="link-desc">Main collection hub: view collection overview, packs/drops, blends, and access the marketplace for SquishEyez.</p>
+      <a href="https://neftyblocks.com/collection/ssquisheyezz" target="_blank" rel="noopener">SquishEyez on NeftyBlocks</a>
+      <p class="link-desc">Collection hub: overview, packs/drops, blends, and marketplace access.</p>
     </div>
 
     <div class="link-item">
-      <a href="https://neftyblocks.com/marketplace/listing?collection_name=ssquisheyezz" target="_blank">NeftyBlocks Marketplace — ssquisheyezz</a>
-      <p class="link-desc">Browse live listings in the <strong>ssquisheyezz</strong> collection, filter by schema/traits, and buy directly in WAX.</p>
+      <a href="https://neftyblocks.com/marketplace/listing?collection_name=ssquisheyezz" target="_blank" rel="noopener">NeftyBlocks Marketplace — ssquisheyezz</a>
+      <p class="link-desc">Browse live listings, filter by schema/traits, and buy in WAX.</p>
     </div>
 
     <div class="link-item">
-      <a href="https://nfthive.io/collection/ssquisheyezz" target="_blank">SquishEyez on NFTHive</a>
-      <p class="link-desc">Collection page with listings, sales history, trait filters, and market analytics for SquishEyez.</p>
+      <a href="https://nfthive.io/collection/ssquisheyezz" target="_blank" rel="noopener">SquishEyez on NFTHive</a>
+      <p class="link-desc">Listings, sales history, trait filters, and market analytics.</p>
     </div>
 
     <div class="link-item">
-      <a href="https://wax.atomichub.io/explorer/collection/ssquisheyezz" target="_blank">SquishEyez on AtomicHub</a>
-      <p class="link-desc">AtomicHub explorer/market for SquishEyez on WAX—view templates, assets, and trade within the ecosystem.</p>
+      <a href="https://wax.atomichub.io/explorer/collection/ssquisheyezz" target="_blank" rel="noopener">SquishEyez on AtomicHub</a>
+      <p class="link-desc">Explore templates and assets; trade within the WAX ecosystem.</p>
     </div>
 
     <div class="link-item">
-      <a href="https://waxdao.io" target="_blank">WAXDAO</a>
-      <p class="link-desc">Blend and farm infrastructure used by the project. Open to see live blend recipes and farms.</p>
+      <a href="https://waxdao.io" target="_blank" rel="noopener">WAXDAO</a>
+      <p class="link-desc">Blend and farm infrastructure used by the project.</p>
     </div>
 
     <div class="link-item">
-      <a href="https://twitter.com/SquishEyez" target="_blank">Twitter</a>
-      <p class="link-desc">Official updates, tease art, drop announcements, and community highlights.</p>
+      <a href="https://twitter.com/SquishEyez" target="_blank" rel="noopener">Twitter</a>
+      <p class="link-desc">Updates, teaser art, drop announcements, and community highlights.</p>
     </div>
 
     <div class="link-item">
-      <a href="https://discord.gg/zRCsmJrU" target="_blank">Discord</a>
-      <p class="link-desc">Join the SquishEyez server for blend help, shard trades, and exclusive announcements.</p>
+      <a href="https://discord.gg/zRCsmJrU" target="_blank" rel="noopener">Discord</a>
+      <p class="link-desc">Join for blend help, shard trades, and exclusive announcements.</p>
     </div>
   </section>
 
@@ -373,7 +388,7 @@ Now, these digital beings not only survive but aim to evolve. Each SSQuisheyezz 
     intro.addEventListener('click', () => {
       intro.style.display = 'none';
       sections.forEach(s => s.style.display = 'block');
-      music.play().catch(()=>{});
+      music.play().catch(() => {});
     });
 
     // Mute/Play
@@ -383,14 +398,17 @@ Now, these digital beings not only survive but aim to evolve. Each SSQuisheyezz 
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         if (music.paused) {
-          music.play().catch(()=>{});
+          music.play().catch(() => {});
           btn.textContent = 'MUTE';
+          btn.setAttribute('aria-pressed', 'false');
         } else {
           music.pause();
           btn.textContent = 'PLAY';
+          btn.setAttribute('aria-pressed', 'true');
         }
       }, { once: true });
     });
   </script>
 </body>
 </html>
+
