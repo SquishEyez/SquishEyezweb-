@@ -1,0 +1,282 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SquishEyez</title>
+<meta name="description" content="SquishEyez on WAX — shardz, blends, drops, farms, and $SQUISH in a clean retro-arcade shell." />
+<link rel="icon" href="https://unavatar.io/x/squisheyez" />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+
+<style>
+:root{
+  --primary:#0eead6;      /* teal, bright but readable */
+  --accent:#ff66cc;       /* muted magenta accent */
+  --bg:#101010;           /* deep charcoal */
+  --panel:#171717;        /* panel background */
+  --ink:#f2f6f5;          /* main text */
+  --muted:#cdd6d4;        /* secondary text */
+  --grid:#2a2a2a;         /* DOS grid lines */
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Press Start 2P', monospace;line-height:1.55}
+
+/* Subtle scanlines for retro vibe (doesn't impact usability) */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(to bottom, rgba(0,0,0,.23) 0 2px, transparent 2px 4px);
+  mix-blend-mode:overlay;opacity:.45
+}
+
+/* Starfield */
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden}
+.stars,.stars2{
+  position:absolute;inset:-60%;opacity:.18;background-repeat:repeat;
+  background-image:
+    radial-gradient(2px 2px at 20px 30px,#fff,transparent),
+    radial-gradient(2px 2px at 100px 80px,#fff,transparent),
+    radial-gradient(2px 2px at 200px 130px,#fff,transparent);
+  animation:drift 140s linear infinite
+}
+.stars2{animation-duration:220s;opacity:.1}
+@keyframes drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-500px,-300px,0)}}
+
+/* ===== Start screen ===== */
+.start{position:fixed;inset:0;z-index:2000;display:grid;place-items:center;background:#000c;transition:.5s}
+.start.hidden{opacity:0;visibility:hidden}
+.start-card{
+  background:linear-gradient(180deg,#141414,#0c0c0c);
+  border:3px solid var(--primary);border-radius:16px;padding:24px;text-align:center;
+  box-shadow:0 0 20px rgba(14,234,214,.3)
+}
+.start h1{font-size:22px;color:var(--primary);margin:0 0 6px}
+.start .dos-sub{font-size:11px;color:#8dfbe9;margin:0 0 10px}
+.start .dos-sub::after{content:"_";animation:caret .9s steps(1,end) infinite}
+@keyframes caret{50%{opacity:0}}
+.start button{
+  margin-top:6px;padding:12px 16px;border:3px solid var(--primary);background:#1b1b1b;color:var(--ink);
+  cursor:pointer;box-shadow:0 0 12px rgba(14,234,214,.25);transition:transform .05s
+}
+.start button:active{transform:translateY(1px)}
+
+/* ===== Layout ===== */
+.wrap{max-width:1000px;margin:20px auto;padding:0 14px}
+.cabinet{background:var(--panel);border:2px solid #242424;border-radius:14px;padding:16px;box-shadow:0 0 30px rgba(14,234,214,.18)}
+.marquee{background:#121212;border:2px solid var(--primary);border-radius:14px;padding:12px;margin-bottom:12px;text-align:center}
+.marquee h1{font-size:20px;color:var(--primary);margin:0}
+.marquee p{font-size:11px;color:var(--muted);margin:8px 0 0}
+.hud{margin-top:8px}
+.hud a{margin:0 6px;color:var(--primary);font-size:11px}
+
+/* ===== Content blocks ===== */
+.block{background:#111;border:2px solid var(--primary);border-radius:14px;padding:16px;margin-bottom:20px}
+.block h2{font-size:15px;margin:0 0 10px;color:var(--primary)}
+.copy{font-size:12px;color:var(--ink)}
+.tiny{font-size:10px;color:var(--muted)}
+
+/* ===== DOS Panel (8-bit terminal aesthetic) ===== */
+.dos{
+  background:
+    linear-gradient(transparent 24px, var(--grid) 24px) top/100% 25px,
+    linear-gradient(90deg, transparent 24px, var(--grid) 24px) left/25px 100%,
+    #0c0f0e;
+  border:2px solid #0f3; /* green like DOS */
+  color:#bfffcf;
+  border-radius:12px;padding:12px
+}
+.dos .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dos .cell{border:1px dashed #1f6; border-radius:8px; padding:10px; background:rgba(0,30,0,.25); text-align:center}
+.dos h3{color:#7dff9b;font-size:11px;margin:0 0 6px}
+.dos p{margin:0;color:#eaffea}
+.dos .prompt{font-size:10px;color:#7dff9b;margin:6px 0 0}
+.dos .prompt::after{content:"_";animation:caret .9s steps(1,end) infinite}
+
+/* ===== Gallery ===== */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.card{border:2px solid var(--primary);border-radius:10px;overflow:hidden;cursor:zoom-in;background:#000}
+.card img{width:100%;height:100%;object-fit:cover}
+
+/* ===== Lightbox ===== */
+.lightbox{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.9);z-index:1500}
+.lightbox.open{display:grid}
+.lightbox img{max-width:95%;max-height:85%;border:2px solid var(--primary);border-radius:10px;background:#000}
+.lightbox button{position:absolute;top:10px;right:10px}
+
+/* Footer */
+footer{text-align:center;font-size:11px;color:var(--muted);margin-top:10px}
+
+/* Responsive tweaks */
+@media (max-width:560px){
+  .dos .row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- START SCREEN -->
+<div class="start" id="start">
+  <div class="start-card">
+    <h1>SquishEyez</h1>
+    <p class="dos-sub">BOOTING ARCADE SHELL… PRESS START</p>
+    <button id="pressStart" aria-label="Press start to enter">PRESS START</button>
+  </div>
+</div>
+
+<!-- Background -->
+<div class="bg"><div class="stars"></div><div class="stars2"></div></div>
+
+<!-- Cabinet -->
+<div class="wrap" id="app" aria-hidden="true">
+  <div class="cabinet">
+    <div class="marquee">
+      <h1>SquishEyez</h1>
+      <p><b>Shard Trading:</b> advertise in Discord #shardz-swap. Trades are completed on <b>AtomicHub Offers/Swap</b> so both sides can verify. <a href="https://discord.gg/zRCsmJrU">Join Discord</a>.</p>
+      <nav class="hud" aria-label="Navigation">
+        <a href="#about">ABOUT</a>
+        <a href="#gallery">GALLERY</a>
+        <a href="#squish">$SQUISH</a>
+        <a href="#blends">BLENDS</a>
+        <a href="#links">HUBS</a>
+      </nav>
+    </div>
+
+    <!-- ABOUT + NFTHive snapshot (restored) -->
+    <section id="about" class="block" aria-labelledby="aboutTitle">
+      <h2 id="aboutTitle">About</h2>
+      <p class="copy"><b>SquishEyez</b> is a playful NFT collection on the WAX blockchain — slimey avatars with giant eyes and bigger personalities. Season 2 introduces <i>Shardz</i> (Top/Bottom) and <i>Blend Diskettez</i> so you can craft full SquishEyez variants with matching traits.</p>
+
+      <!-- 8-bit DOS style stats panel (static snapshot) -->
+      <div class="dos" role="group" aria-label="NFTHive Collection Stats — static snapshot">
+        <div class="row">
+          <div class="cell"><h3>NFT Marketcap</h3><p>$445.00</p></div>
+          <div class="cell"><h3>Users</h3><p>196</p></div>
+          <div class="cell"><h3>Market Fee</h3><p>6%</p></div>
+          <div class="cell"><h3>Community Score</h3><p>139.53</p></div>
+        </div>
+        <div class="prompt">C:\\SQUISHEYEZ&gt; Stats loaded (NFTHive snapshot)</div>
+      </div>
+      <p class="tiny">Source: <a href="https://nfthive.io/collection/ssquisheyezz" target="_blank" rel="noopener">NFTHive — Ssquisheyezz collection</a>. Snapshot values are embedded for reliability.</p>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery" class="block" aria-labelledby="galleryTitle">
+      <h2 id="galleryTitle">Showcase</h2>
+      <div class="grid">
+        <!-- Sk8Coin deck + 8 Ssquisheyezz assets -->
+        <figure class="card"><img loading="lazy" src="https://ipfs.neftyblocks.io/ipfs/Qme3gS6qP3xTvhri5aWNfhZQeWgS5WJfsSTnYmaYfawuHL" alt="Sk8Coin SquishEyez Deck"></figure>
+        <figure class="card"><img loading="lazy" src="https://ipfs.neftyblocks.io/ipfs/QmNjE4zmvTh6SK6yusTspi4cgNqKkgCoz2Mc25VCruh8Ud" alt="SquishEyez Asset 2"></figure>
+        <figure class="card"><img loading="lazy" src="https://ipfs.neftyblocks.io/ipfs/QmWFFMCmLiqmz9AkQF4nyzNKiR12GXFGdbjBqFEqzkyTc6" alt="SquishEyez Asset 3"></figure>
+        <figure class="card"><img loading="lazy" src="https://ipfs.neftyblocks.io/ipfs/QmVMRAcFY15UNbbvDf3NNUHoN3RvCRNcsT8gNttUaR9ony" alt="SquishEyez Asset 4"></figure>
+        <figure class="card"><img loading="lazy" src="https://ipfs.neftyblocks.io/ipfs/QmRSkAy4M4GUiVDxsiif3DH86hzir8Jk4wCGZpDTeL1nC7" alt="SquishEyez Asset 5"></figure>
+        <figure class="card"><img loading="lazy" src="https://ipfs.neftyblocks.io/ipfs/QmUq61ZJgy2mkYQy6VWQ9o86Ek8XexyiZPTBpA3CKYA9j1" alt="SquishEyez Asset 6"></figure>
+        <figure class="card"><img loading="lazy" src="https://ipfs.neftyblocks.io/ipfs/QmctzxUsSuTiie6tAtmmvSEzaEnxa6bk3uECNzzNQNz5jS" alt="SquishEyez Asset 7"></figure>
+        <figure class="card"><img loading="lazy" src="https://ipfs.neftyblocks.io/ipfs/QmWCBLTPZFPCKc5ZTNTCoftB5eKNae5aAdJpb7gUpnVhG9" alt="SquishEyez Asset 8"></figure>
+        <figure class="card"><img loading="lazy" src="https://ipfs.neftyblocks.io/ipfs/QmW37YUasmF21gcp4w4u5EUdD2Z8cyyedwjavGYHsjTq3Y" alt="SquishEyez Asset 9"></figure>
+      </div>
+    </section>
+
+    <!-- $SQUISH -->
+    <section id="squish" class="block" aria-labelledby="squishTitle">
+      <h2 id="squishTitle">$SQUISH</h2>
+      <p class="copy"><a href="https://eosauthority.com/tokens/ribbitartwrk/SQUISH?network=wax" target="_blank" rel="noopener"><b>$SQUISH on EOS Authority</b></a>: On-chain token info (contract <i>ribbitartwrk</i>): supply, holders, transfers, and contract details.</p>
+      <p class="copy"><a href="https://waxdao.io/blends/1775" target="_blank" rel="noopener"><b>WaxDAO Blend #1775 — Unwrap 69× $SQUISH NFT</b></a>: Unwrap a 69× $SQUISH NFT and receive the underlying <b>$SQUISH tokens</b> back to your wallet.</p>
+      <p class="copy"><a href="https://waxdao.io/blends/1718" target="_blank" rel="noopener"><b>WaxDAO Blend #1718 — Wrap 69× $SQUISH</b></a>: Wrap <b>69× $SQUISH</b> into a single NFT for easy trading/collecting.</p>
+    </section>
+
+    <!-- BLENDS / DROPS -->
+    <section id="blends" class="block" aria-labelledby="blendTitle">
+      <h2 id="blendTitle">Blends & Drops</h2>
+      <p class="copy">To craft a completed SquishEye in Season 2, <b>blend Top & Bottom Shardz with matching traits</b> together with a <b>Blend Diskette</b>. Matching traits + diskette ⇒ the relevant finished SquishEye.</p>
+
+      <h3 style="font-size:12px;color:var(--primary);margin:14px 0 6px">Blends (WaxDAO)</h3>
+      <ul class="tiny" style="margin:0 0 10px 16px">
+        <li><a href="https://waxdao.io/blends/1876" target="_blank" rel="noopener">Piece V9.0 / Doodlez</a></li>
+        <li><a href="https://waxdao.io/blends/1875" target="_blank" rel="noopener">Piece V9.0 / Pixelz</a></li>
+        <li><a href="https://waxdao.io/blends/1874" target="_blank" rel="noopener">Piece V8.0 / Pixelz</a></li>
+        <li><a href="https://waxdao.io/blends/1873" target="_blank" rel="noopener">Piece V8.0 / Doodlez</a></li>
+        <li><a href="https://waxdao.io/blends/1872" target="_blank" rel="noopener">Piece V7.0 / Doodlez</a></li>
+        <li><a href="https://waxdao.io/blends/1871" target="_blank" rel="noopener">Piece V7.0 / Pixelz</a></li>
+        <li><a href="https://waxdao.io/blends/1870" target="_blank" rel="noopener">Piece V6.0 / Pixelz</a></li>
+        <li><a href="https://waxdao.io/blends/1869" target="_blank" rel="noopener">Piece V6.0 / Doodlez</a></li>
+        <li><a href="https://waxdao.io/blends/1868" target="_blank" rel="noopener">Piece V5.0 / Doodlez</a></li>
+        <li><a href="https://waxdao.io/blends/1865" target="_blank" rel="noopener">Piece V5.0 / Pixelz</a></li>
+        <li><a href="https://waxdao.io/blends/1850" target="_blank" rel="noopener">Piece V4.0 / Doodlez</a></li>
+        <li><a href="https://waxdao.io/blends/1849" target="_blank" rel="noopener">Piece V4.0 / Pixelz</a></li>
+        <li><a href="https://waxdao.io/blends/1848" target="_blank" rel="noopener">Piece V3.0 / Doodlez</a></li>
+        <li><a href="https://waxdao.io/blends/1847" target="_blank" rel="noopener">Piece V3.0 / Pixelz</a></li>
+        <li><a href="https://waxdao.io/blends/1846" target="_blank" rel="noopener">Piece V2.0 / Doodlez</a></li>
+        <li><a href="https://waxdao.io/blends/1845" target="_blank" rel="noopener">Piece V2.0 / Pixelz</a></li>
+        <li><a href="https://waxdao.io/blends/1844" target="_blank" rel="noopener">Piece V1.0 / Doodlez</a></li>
+        <li><a href="https://waxdao.io/blends/1843" target="_blank" rel="noopener">Piece V1.0 / Pixelz</a></li>
+      </ul>
+
+      <h3 style="font-size:12px;color:var(--primary);margin:12px 0 6px">Drops</h3>
+      <ul class="tiny" style="margin:0 0 0 16px">
+        <li><a href="https://nfthive.io/drop/8687" target="_blank" rel="noopener">Season 2 Shard Packz (NFTHive)</a></li>
+        <li><a href="https://nfthive.io/drop/8693" target="_blank" rel="noopener">Blend Diskettez (NFTHive)</a></li>
+        <li><a href="https://nfthive.io/drop/10860" target="_blank" rel="noopener">SquishTrialZ (NFTHive)</a></li>
+        <li><a href="https://neftyblocks.com/collection/skatecoinwax/drops/228566" target="_blank" rel="noopener">Sk8Coin: SquishEyez Deck (NeftyBlocks)</a></li>
+      </ul>
+    </section>
+
+    <!-- HUBS -->
+    <section id="links" class="block" aria-labelledby="linksTitle">
+      <h2 id="linksTitle">Explore</h2>
+      <p class="tiny"><a href="https://neftyblocks.com/collection/ssquisheyezz" target="_blank" rel="noopener">NeftyBlocks Hub</a>: Drops & blends.</p>
+      <p class="tiny"><a href="https://nfthive.io/collection/ssquisheyezz" target="_blank" rel="noopener">NFTHive</a>: Listings & analytics.</p>
+      <p class="tiny"><a href="https://wax.atomichub.io/explorer/collection/ssquisheyezz" target="_blank" rel="noopener">AtomicHub Explorer</a>: Templates, assets, trades.</p>
+      <p class="tiny"><a href="https://waxdao.io" target="_blank" rel="noopener">WAXDAO</a>: Blending & farming backbone.</p>
+      <p class="tiny"><a href="https://discord.gg/zRCsmJrU" target="_blank" rel="noopener">Discord</a>: Community hub + shard swap channel (advertise trades, complete via AtomicHub Offers/Swap).</p>
+      <p class="tiny"><a href="https://x.com/squisheyez" target="_blank" rel="noopener">X (Twitter) — @squisheyez</a>: Updates & previews.</p>
+    </section>
+
+    <footer>&copy; 2025 Next Door Media</footer>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button id="closeLightbox" aria-label="Close">CLOSE</button>
+  <img id="lightboxImg" alt="Expanded artwork" />
+</div>
+
+<script>
+/* Start flow */
+const start=document.getElementById('start'), press=document.getElementById('pressStart'), app=document.getElementById('app');
+function begin(){ if(start){start.classList.add('hidden');} app?.removeAttribute('aria-hidden'); }
+press.addEventListener('click',begin);
+window.addEventListener('keydown',e=>{ if(e.code==='Space' || e.code==='Enter'){ begin(); }});
+
+/* Smooth internal nav */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const id=a.getAttribute('href').slice(1);
+    const el=document.getElementById(id);
+    if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth'}); }
+  });
+});
+
+/* Lightbox */
+const cards=document.querySelectorAll('.card');
+const lb=document.getElementById('lightbox');
+const lbImg=document.getElementById('lightboxImg');
+const lbClose=document.getElementById('closeLightbox');
+
+cards.forEach(c=>{
+  c.addEventListener('click',()=>{
+    const i=c.querySelector('img'); if(!i) return;
+    lbImg.src=i.src; lbImg.alt=i.alt||'Expanded artwork';
+    lb.classList.add('open'); lb.setAttribute('aria-hidden','false');
+  });
+});
+
+lbClose.addEventListener('click',()=>{
+  lb.classList.remove('open');
+  lb.setAttribute('aria-hidden','true');
+});
+lb.addEventListener('click',e=>{
+  if(e.target===lb) lbClose.click();
+});
+</script>
+</body>
+</html>
