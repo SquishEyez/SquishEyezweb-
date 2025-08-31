@@ -1,0 +1,377 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SquishEyez NFT Collection</title>
+
+  <!-- Retro arcade font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+
+  <style>
+    :root{
+      --bg:#0a0a0f;
+      --panel:#11111a;
+      --accent:#ff0037;           /* Stranger-Things neon */
+      --accent-2:#00ffd0;         /* CRT teal */
+      --text:#d0d0ee;
+      --muted:#8a8aa5;
+      --card:#141423;
+      --glow:0 0 .5rem var(--accent), 0 0 1.1rem rgba(255,0,55,.55);
+      --radius:14px;
+      --shadow:0 10px 25px rgba(0,0,0,.55);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background: radial-gradient(60% 80% at 50% 10%, #151523 0%, #0b0b12 60%, #040409 100%), var(--bg);
+      overflow-x:hidden;
+    }
+
+    /* neon grid floor */
+    .grid{
+      position:fixed; inset:0; z-index:-2;
+      background:
+        linear-gradient(rgba(255,0,55,.08), rgba(255,0,55,0) 60%),
+        radial-gradient(80% 50% at 50% 10%, rgba(0,255,208,.08), transparent 60%),
+        repeating-linear-gradient(#1a1a2a 0 2px, transparent 2px 4px),
+        repeating-linear-gradient(90deg, #1a1a2a 0 2px, transparent 2px 4px);
+      transform: perspective(800px) rotateX(65deg);
+      transform-origin: top center;
+      top:45%;
+      filter: drop-shadow(0 0 8px rgba(255,0,55,.35));
+      pointer-events:none; /* ensure background never blocks clicks */
+    }
+
+    /* CRT scanlines + subtle flicker */
+    .crt:before{
+      content:""; pointer-events:none;   /* don't block clicks */
+      position:fixed; inset:0; z-index:9999;
+      background:
+        repeating-linear-gradient(transparent 0 2px, rgba(0,0,0,.15) 2px 3px);
+      mix-blend-mode: multiply;
+      opacity:.25;
+      animation: flicker 4.5s infinite steps(60);
+    }
+    @keyframes flicker{50%{opacity:.22} 60%{opacity:.28} 100%{opacity:.25}}
+
+    /* arcade cabinet frame */
+    .cabinet{
+      max-width:1100px; margin:32px auto 80px; padding:0 16px;
+      position:relative;
+    }
+    .bezel{
+      border-radius:28px;
+      padding:18px;
+      background:
+        linear-gradient(145deg, #0f0f18, #05050b);
+      box-shadow:
+        inset 0 0 0 3px #1b1b2e,
+        inset 0 0 0 6px rgba(255,0,55,.15),
+        var(--shadow);
+      position:relative;
+      z-index:0;               /* create stacking context */
+    }
+    /* ⬇️ These were overlaying your content; disable interaction and put beneath */
+    .bezel:before,
+    .bezel:after{
+      content:"";
+      position:absolute; inset:-10px;
+      border-radius:34px;
+      border:2px solid rgba(255,0,55,.65);
+      filter:blur(6px);
+      opacity:.6;
+      pointer-events:none;
+      z-index:0;
+    }
+    .bezel:after{
+      inset:-18px; border-color:rgba(0,255,208,.35); opacity:.35;
+    }
+    /* ensure all real content sits above decorative layers */
+    .bezel > *{ position:relative; z-index:1 }
+
+    header{
+      text-align:center;
+      padding:26px 18px 6px;
+    }
+    header .logo{
+      width:132px; height:132px; border-radius:50%;
+      border:4px solid #241f2e; box-shadow: var(--glow);
+    }
+    h1, h2, h3{
+      font-family:'Press Start 2P', system-ui, sans-serif;
+      letter-spacing:.02em;
+    }
+    h1{
+      color:var(--accent);
+      text-shadow: var(--glow);
+      font-size: clamp(20px, 3.2vw, 34px);
+      margin:18px 0 8px;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:12px;
+      margin:0 0 18px;
+    }
+
+    /* nav ribbon (DOS-style) */
+    .ribbon{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
+      padding:10px 12px 18px;
+    }
+    .ribbon a{
+      text-decoration:none;
+      color:var(--accent-2);
+      border:1px solid rgba(0,255,208,.3);
+      background: linear-gradient(180deg,#121223,#0c0c17);
+      padding:10px 14px; border-radius:10px;
+      box-shadow: 0 0 0 2px rgba(0,0,0,.5) inset, 0 6px 14px rgba(0,0,0,.5);
+      font-family:'Press Start 2P', system-ui, sans-serif;
+      font-size:11px;
+      transition: transform .08s ease, box-shadow .08s ease;
+    }
+    .ribbon a:hover{ box-shadow: 0 0 12px rgba(0,255,208,.35), var(--shadow); transform: translateY(-1px) }
+    .ribbon a:active{ transform: translateY(0) scale(.99) }
+
+    section{
+      background:linear-gradient(180deg,#121222,#0f0f1a);
+      border:1px solid #22223a;
+      border-radius:var(--radius);
+      padding:18px;
+      margin:18px 0;
+      box-shadow: var(--shadow);
+    }
+    .section-title{
+      display:flex; align-items:center; gap:10px; margin:0 0 14px;
+    }
+    .section-title h2{
+      font-size: clamp(14px, 2vw, 18px);
+      margin:0; color:#fff;
+      text-shadow: 0 0 12px rgba(255,0,55,.5);
+    }
+    .led{
+      width:10px; height:10px; border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, #fff, var(--accent) 40%, rgba(255,0,55,.15) 65%);
+      box-shadow: 0 0 12px var(--accent);
+      animation: blink 1.5s infinite;
+    }
+    @keyframes blink{50%{filter:saturate(1.8) brightness(1.4)}}
+
+    /* About copy */
+    .description p{line-height:1.6; color:#e4e4ff; margin:.6em 0}
+    .description .bullets{
+      display:grid; gap:8px; margin-top:10px;
+      padding-left:18px; color:#cfd0ff;
+    }
+    .muted{color:var(--muted)}
+
+    /* stats */
+    .stats{
+      display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:10px;
+    }
+    .stat{
+      background:linear-gradient(180deg,#161628,#0f0f18);
+      border:1px solid #242444;
+      border-radius:12px; padding:14px; text-align:center;
+    }
+    .stat h3{
+      margin:0 0 6px; font-size:12px; color:var(--accent-2);
+    }
+    .stat .num{
+      font-family:'Press Start 2P', system-ui, sans-serif;
+      font-size:20px; color:#fff;
+      text-shadow: 0 0 12px rgba(0,255,208,.35);
+    }
+
+    /* gallery */
+    .gallery{
+      display:grid; gap:10px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+    .gallery img{
+      width:100%; height:auto; border-radius:10px;
+      border:1px solid #2a2a46;
+      box-shadow: 0 12px 24px rgba(0,0,0,.5);
+      transition: transform .15s ease;
+    }
+    .gallery img:hover{ transform: translateY(-3px) scale(1.02) }
+
+    /* lists */
+    .links ul, .bl ul{list-style:none; padding:0; margin:0; display:grid; gap:10px}
+    .links a, .bl a{ color:#b9fff3; text-decoration:none }
+    .item{
+      background:linear-gradient(180deg,#141428,#0e0e18);
+      border:1px solid #242444;
+      border-radius:10px; padding:12px;
+    }
+    .item small{ color:var(--muted) }
+
+    footer{
+      text-align:center; color:#b8b8d6; font-size:12px; padding:30px 12px 60px;
+    }
+
+    /* small DOS prompt label */
+    .prompt{
+      font-family:'Press Start 2P', system-ui, sans-serif;
+      font-size:11px; color:#00ff95; margin:10px 0 0;
+    }
+
+    /* responsive tweaks */
+    @media (max-width:720px){
+      .ribbon a{font-size:10px}
+      .stat .num{font-size:18px}
+    }
+  </style>
+</head>
+<body class="crt">
+  <div class="grid" aria-hidden="true"></div>
+
+  <div class="cabinet">
+    <div class="bezel">
+
+      <header>
+        <img class="logo" src="https://pbs.twimg.com/profile_images/1788039407741648896/TtNCpsSt.jpg" alt="SquishEyez logo">
+        <h1>SquishEyez</h1>
+        <p class="sub">90s pixel lifeforms surviving in the DOS era — reborn on WAX.</p>
+
+        <!-- quick links ribbon (kept concise) -->
+        <nav class="ribbon" aria-label="Primary">
+          <a href="#about">ABOUT</a>
+          <a href="#stats">STATS</a>
+          <a href="#gallery">GALLERY</a>
+          <a href="#blends">BLENDS</a>
+          <a href="#drops">DROPS</a>
+          <a href="#farms">FARMS</a>
+          <a href="#links">LINKS</a>
+        </nav>
+      </header>
+
+      <!-- ABOUT -->
+      <section id="about" class="description">
+        <div class="section-title"><span class="led"></span><h2>About SquishEyez</h2></div>
+        <p><strong>Adopt a Squish.</strong> Born from the “Big Squish,” these beings evolved from single-pixel organisms into curious lifeforms that slipped into early-90s PCs. When high-res graphics outpaced them, they found a new refuge as NFTs on the WAX blockchain.</p>
+        <p><strong>Series & Art.</strong> The genesis set <em>squisheyezs1</em> features 69 hand-made 1/1 pieces by <em>@buttzwithaZ</em>, with traits like <em>Filtered</em>, <em>Pixelated</em>, and <em>Gameboy</em> to honor their crunchy pixel roots. Expect 8-bit stills, snappy animation, and delightfully weird audio.</p>
+        <p><strong>Community & Perks.</strong> Holders get competitions, airdrops, and DAO-style participation. Special pieces <strong>#1</strong>, <strong>#21</strong>, <strong>#25</strong> unlock extra drops via EOS/WAX. <strong>#67–#69</strong> are reserved for giveaways. “<em>SquishEyez 01</em>” is a 10/10 promo tied to pre-sale activities (via @ribbit_artwork &amp; @Squisheyez).</p>
+        <p><strong>Minting & Rights.</strong> Minted via <a href="https://neftyblocks.com/" target="_blank" rel="noopener">NeftyBlocks</a> and <a href="https://wax.atomichub.io/" target="_blank" rel="noopener">AtomicHub</a>. Funded by Next Door Media (UK). Owners can display and distribute the artwork/digital asset; the creator retains authorship and derivative distribution rights.</p>
+        <div class="bullets">
+          <li><strong>Creator:</strong> @buttzwithaZ — Next Door Media (UK)</li>
+          <li><strong>Contact:</strong> <a href="mailto:nextdoormedia@protonmail.com">nextdoormedia@protonmail.com</a></li>
+          <li><strong>Social:</strong> @ButtzwithaZ · @ribbit_artwork · @Squisheyez</li>
+        </div>
+        <p class="prompt">C:\SQUISH&gt; _</p>
+      </section>
+
+      <!-- STATS -->
+      <section id="stats" aria-labelledby="stats-title">
+        <div class="section-title"><span class="led"></span><h2 id="stats-title">Collection Stats</h2></div>
+        <div class="stats">
+          <div class="stat"><h3>Total Assets</h3><div class="num">17.3K</div></div>
+          <div class="stat"><h3>Owners</h3><div class="num">195</div></div>
+          <div class="stat"><h3>Blockchain</h3><div class="num">WAX</div></div>
+        </div>
+      </section>
+
+      <!-- GALLERY -->
+      <section id="gallery" aria-labelledby="gallery-title">
+        <div class="section-title"><span class="led"></span><h2 id="gallery-title">Gallery</h2></div>
+        <div class="gallery">
+          <img src="https://ipfs.neftyblocks.io/ipfs/QmNjE4zmvTh6SK6yusTspi4cgNqKkgCoz2Mc25VCruh8Ud" alt="SquishEyez 1">
+          <img src="https://ipfs.neftyblocks.io/ipfs/QmWFFMCmLiqmz9AkQF4nyzNKiR12GXFGdbjBqFEqzkyTc6" alt="SquishEyez 2">
+          <img src="https://ipfs.neftyblocks.io/ipfs/QmVMRAcFY15UNbbvDf3NNUHoN3RvCRNcsT8gNttUaR9ony" alt="SquishEyez 3">
+          <img src="https://ipfs.neftyblocks.io/ipfs/QmRSkAy4M4GUiVDxsiif3DH86hzir8Jk4wCGZpDTeL1nC7" alt="SquishEyez 4">
+          <img src="https://ipfs.neftyblocks.io/ipfs/QmUq61ZJgy2mkYQy6VWQ9o86Ek8XexyiZPTBpA3CKYA9j1" alt="SquishEyez 5">
+          <img src="https://ipfs.neftyblocks.io/ipfs/QmctzxUsSuTiie6tAtmmvSEzaEnxa6bk3uECNzzNQNz5jS" alt="SquishEyez 6">
+          <img src="https://ipfs.neftyblocks.io/ipfs/QmWCBLTPZFPCKc5ZTNTCoftB5eKNae5aAdJpb7gUpnVhG9" alt="SquishEyez 7">
+          <img src="https://ipfs.neftyblocks.io/ipfs/QmW37YUasmF21gcp4w4u5EUdD2Z8cyyedwjavGYHsjTq3Y" alt="SquishEyez 8">
+          <img src="https://ipfs.neftyblocks.io/ipfs/Qme3gS6qP3xTvhri5aWNfhZQeWgS5WJfsSTnYmaYfawuHL" alt="Sk8Coin SquishEyez Deck">
+        </div>
+      </section>
+
+      <!-- BLENDS / DROPS / FARMS -->
+      <section id="blends" aria-labelledby="blends-title" class="bl">
+        <div class="section-title"><span class="led"></span><h2 id="blends-title">Blends</h2></div>
+        <p class="muted">Fuse Shardz → SquisheyeZ using Blend Diskettez. Full list in Discord.</p>
+        <ul>
+          <li class="item"><a href="https://discord.com/invite/n8ZfNSen" target="_blank" rel="noopener">Discord (blend list)</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1876" target="_blank" rel="noopener">Piece V9.0 · Doodlez</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1875" target="_blank" rel="noopener">Piece V9.0 · Pixelz</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1874" target="_blank" rel="noopener">Piece V8.0 · Pixelz</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1873" target="_blank" rel="noopener">Piece V8.0 · Doodlez</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1872" target="_blank" rel="noopener">Piece V7.0 · Doodlez</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1871" target="_blank" rel="noopener">Piece V7.0 · Pixelz</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1870" target="_blank" rel="noopener">Piece V6.0 · Pixelz</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1869" target="_blank" rel="noopener">Piece V6.0 · Doodlez</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1868" target="_blank" rel="noopener">Piece V5.0 · Doodlez</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1865" target="_blank" rel="noopener">Piece V5.0 · Pixelz</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1850" target="_blank" rel="noopener">Piece V4.0 · Doodlez</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1849" target="_blank" rel="noopener">Piece V4.0 · Pixelz</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1848" target="_blank" rel="noopener">Piece V3.0 · Doodlez</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1847" target="_blank" rel="noopener">Piece V3.0 · Pixelz</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1846" target="_blank" rel="noopener">Piece V2.0 · Doodlez</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1845" target="_blank" rel="noopener">Piece V2.0 · Pixelz</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1844" target="_blank" rel="noopener">Piece V1.0 · Doodlez</a></li>
+          <li class="item"><a href="https://waxdao.io/blends/1843" target="_blank" rel="noopener">Piece V1.0 · Pixelz</a></li>
+        </ul>
+      </section>
+
+      <section id="drops" aria-labelledby="drops-title" class="bl">
+        <div class="section-title"><span class="led"></span><h2 id="drops-title">Drops</h2></div>
+        <ul>
+          <li class="item">
+            <a href="https://nfthive.io/drop/8687" target="_blank" rel="noopener">Season 2 Shard Packz</a>
+            <small>Shardz for blending · accepts $DHC $HONEY $WOMBAT $SKUNKY $WUF · 100k cashback/pack · Pixelz vs Doodlez.</small>
+          </li>
+          <li class="item">
+            <a href="https://nfthive.io/drop/8693" target="_blank" rel="noopener">Blend Diskettez</a>
+            <small>Required to fuse Shardz → SquisheyeZ.</small>
+          </li>
+          <li class="item">
+            <a href="https://nfthive.io/drop/10860" target="_blank" rel="noopener">SquishTrialZ</a>
+            <small>6 × 1/1 SquishArtZ · $WAXP or $WUF · tied to site &amp; SquishMap, spaces with @PuzzlerPuzzled, NFTopia 2025 booth.</small>
+          </li>
+          <li class="item">
+            <a href="https://neftyblocks.com/collection/skatecoinwax/drops/228566" target="_blank" rel="noopener">Sk8Coin Deck Drop</a>
+            <small>NeftyBlocks · 100 WAX · supply 22/22 · deck component for craft.</small>
+          </li>
+        </ul>
+      </section>
+
+      <section id="farms" aria-labelledby="farms-title" class="bl">
+        <div class="section-title"><span class="led"></span><h2 id="farms-title">$SQUISH Farms</h2></div>
+        <p class="muted">We reinvest via WAXDAO staking and holder airdrops. Floppy NFTs farm a small amount of $SQUISH; OG Squisheyez farm best.</p>
+        <ul>
+          <li class="item"><a href="https://waxdao.io/farm/squish2.exe" target="_blank" rel="noopener">Squish2.exe Farm</a> — stake 5.25" Floppy Digital Assets / qualifying NFTs.</li>
+          <li class="item"><a href="https://waxdao.io/v2/farm/squish.bat" target="_blank" rel="noopener">Squish.bat Farm</a> — stake OG <em>squisheyezs1</em> to earn <strong>1.69 $SQUISH / day</strong> per NFT.</li>
+        </ul>
+      </section>
+
+      <!-- LINKS -->
+      <section id="links" class="links" aria-labelledby="links-title">
+        <div class="section-title"><span class="led"></span><h2 id="links-title">Links</h2></div>
+        <ul>
+          <li class="item"><a href="https://neftyblocks.com/collection/ssquisheyezz" target="_blank" rel="noopener">NeftyBlocks</a> <small>Trade-to-earn marketplace on WAX.</small></li>
+          <li class="item"><a href="https://nfthive.io/collection/ssquisheyezz" target="_blank" rel="noopener">NFTHive</a> <small>Marketplace, drops &amp; tools.</small></li>
+          <li class="item"><a href="https://wax.atomichub.io/explorer/collection/ssquisheyezz" target="_blank" rel="noopener">AtomicHub</a> <small>High-scale NFT platform.</small></li>
+          <li class="item"><a href="https://waxdao.io" target="_blank" rel="noopener">WAXDAO</a> <small>Blends, farms, creator tools.</small></li>
+          <li class="item">
+            <a href="https://twitter.com/SquishEyez" target="_blank" rel="noopener">Twitter (@SquishEyez)</a>
+            <small>Collection: https://neftyblocks.com/collection/ssquisheyezz · $SQUISH · $EYEZ · $WAXP · © Next Door Media (UK).</small>
+          </li>
+          <li class="item"><a href="https://discord.com/invite/n8ZfNSen" target="_blank" rel="noopener">Discord</a> <small>Community, updates, blend list.</small></li>
+          <li class="item"><a href="mailto:nextdoormedia@protonmail.com">Email</a> <small>nextdoormedia@protonmail.com</small></li>
+        </ul>
+      </section>
+
+      <footer>
+        <p>&copy; 2025 Next Door Media. All rights reserved.</p>
+      </footer>
+
+    </div>
+  </div>
+</body>
+</html>
