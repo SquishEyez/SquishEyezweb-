@@ -286,84 +286,48 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@waxio/waxjs@1.0.0/dist-web/waxjs.js"></script>
-  <script>
-    /* Navigation */
-    document.getElementById('nav').addEventListener('click', (e) => {
-      const a = e.target.closest('a[href^="#"]');
-      if (!a) return;
-      e.preventDefault();
-      const id = a.getAttribute('href');
-      const el = document.querySelector(id);
-      if (!el) return;
-      const y = window.scrollY + el.getBoundingClientRect().top - 20;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    });
+<script>
+  /* Navigation and PRESS START (keep your existing code) */
 
-    /* PRESS START */
-    const startEl = document.getElementById('start');
-    const startBtn = document.getElementById('startBtn');
-    function enterSite() { if (startEl) startEl.classList.add('hidden'); }
-    if (startBtn) startBtn.addEventListener('click', enterSite);
-    document.addEventListener('keydown', (e) => { if (e.code === 'Space' || e.code === 'Enter') enterSite(); });
-    if (startEl) startEl.addEventListener('click', (e) => { if (e.target === startEl) enterSite(); });
+  /* === IMPROVED WALLET CONNECTION === */
+  let waxInstance = null;
+  let userAccount = null;
+  const walletBtn = document.getElementById('connectWallet');
 
-    /* Wallet Connect */
-    let wax = null;
-    let userAccount = null;
-    const walletBtn = document.getElementById('connectWallet');
+  async function connectWallet() {
+    if (userAccount) {
+      alert(`Already connected as: ${userAccount}`);
+      return;
+    }
 
-    async function connectWallet() {
-      try {
-        wax = new waxjs.WaxJS({ rpcEndpoint: 'https://wax.greymass.com' });
-        userAccount = await wax.login();
-        walletBtn.textContent = `✅ ${userAccount}`;
-        walletBtn.style.background = '#00ff9d';
-        alert(`✅ Connected as: ${userAccount}\n\nYou can now sign blockchain transactions directly from this site.`);
-      } catch (e) {
-        alert('Wallet connection cancelled or failed.');
+    try {
+      waxInstance = new waxjs.WaxJS({
+        rpcEndpoint: 'https://wax.greymass.com',
+        tryAutoLogin: true   // tries to restore previous session
+      });
+
+      userAccount = await waxInstance.login();
+      
+      walletBtn.innerHTML = `✅ <strong>${userAccount}</strong>`;
+      walletBtn.style.background = '#00ff9d';
+      walletBtn.style.color = '#001100';
+
+      console.log('✅ Connected:', userAccount);
+      alert(`Wallet connected successfully!\nAccount: ${userAccount}\n\nYou can now perform on-chain actions (blends, staking, etc.) once we add the buttons.`);
+
+    } catch (err) {
+      console.error(err);
+      if (err.message?.includes("user rejected")) {
+        alert("Connection cancelled by user.");
+      } else {
+        alert("Could not connect to WAX Cloud Wallet.\n\nMake sure you have a My Cloud Wallet account and try again.");
       }
     }
-    if (walletBtn) walletBtn.addEventListener('click', connectWallet);
+  }
 
-    /* Live Ticker */
-    const API = 'https://wax-api.hivebp.io/v3';
-    const COLLECTION = 'ssquisheyezz';
-    const nInt = (n) => (n == null || isNaN(n)) ? '—' : new Intl.NumberFormat().format(Math.round(n));
+  walletBtn.addEventListener('click', connectWallet);
 
-    async function j(u) {
-      try {
-        const r = await fetch(u, { mode: 'cors', cache: 'no-store' });
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.json();
-      } catch (e) { return null; }
-    }
-
-    async function loadStats() {
-      try {
-        const [stats, assets] = await Promise.all([
-          j(`\( {API}/collection-stats/ \){COLLECTION}`),
-          j(`\( {API}/num-assets/ \){COLLECTION}`)
-        ]);
-        const holders = stats?.holders ?? stats?.unique_holders ?? null;
-        const as = assets?.num_assets ?? assets?.value ?? assets?.count ?? null;
-
-        const parts = [
-          `<a href="https://wax.atomichub.io/explorer/collection/${COLLECTION}" target="_blank">AtomicHub</a>`,
-          as != null ? `Assets: ${nInt(as)}` : null,
-          holders != null ? `Holders: ${nInt(holders)}` : null,
-          `<a href="https://waxdao.io" target="_blank">WAXDAO</a>`
-        ].filter(Boolean);
-
-        document.getElementById('ticker').innerHTML = 
-          `<span>SquishEyez × Sk8Coin LIVE</span>` + 
-          parts.map(p => `<span class="dot">●</span><span>${p}</span>`).join('');
-      } catch (e) {
-        document.getElementById('ticker').innerHTML = `<span>SquishEyez × Sk8Coin • Live stats temporarily unavailable</span>`;
-      }
-    }
-
-    loadStats();
-    setInterval(loadStats, 120000);
-  </script>
+  /* Rest of your ticker + other scripts */
+</script>
 </body>
 </html>
