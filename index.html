@@ -3,331 +3,190 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SquishEyez| Official Hub</title>
-
-  <!-- Retro arcade font -->
+  <title>SquishEyez × Sk8Coin | $SQUISH Farms Recovery</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
-
   <style>
     :root{
       --bg:#0a0a0f;
-      --panel:#0c0c14;
-      --accent:#ff0037;
       --accent-2:#00ff9d;
       --text:#aaffcc;
       --muted:#55cc88;
-      --radius:8px;
-      --shadow:0 10px 25px rgba(0,0,0,.7);
-      --glow:0 0 .6rem var(--accent-2), 0 0 1.4rem rgba(0,255,157,.6);
       --dos-green:#00ff9d;
+      --glow:0 0 .6rem #00ff9d, 0 0 1.4rem rgba(0,255,157,.6);
     }
-
     *{box-sizing:border-box}
-    html,body{height:100%; margin:0;}
-    body{
-      font-family: 'Courier New', monospace;
-      color:var(--text);
-      background: radial-gradient(60% 80% at 50% 10%, #112211 0%, #0a0a0f 70%, #040404 100%), var(--bg);
-      overflow-x:hidden;
-      image-rendering: pixelated;
-    }
-
-    .grid{
-      position:fixed; inset:0; z-index:-3;
-      background:
-        linear-gradient(rgba(0,255,157,.07), transparent 70%),
-        repeating-linear-gradient(#112211 0 3px, transparent 3px 6px),
-        repeating-linear-gradient(90deg, #112211 0 3px, transparent 3px 6px);
-      transform: perspective(900px) rotateX(68deg);
-      transform-origin: top center;
-      top:48%;
-      pointer-events:none;
-      opacity:0.85;
-    }
-
-    .crt:before{
-      content:""; pointer-events:none;
-      position:fixed; inset:0; z-index:9999;
-      background:repeating-linear-gradient(transparent 0 3px, rgba(0,0,0,.18) 3px 4px);
-      mix-blend-mode:multiply; opacity:.25;
-      animation:flicker 4s infinite steps(80);
-    }
-    @keyframes flicker{50%{opacity:.18} 55%{opacity:.28} 100%{opacity:.25}}
-
-    .cabinet{max-width:1140px; margin:20px auto 60px; padding:0 12px; position:relative;}
-    .bezel{
-      position:relative; z-index:0;
-      border-radius:12px; padding:14px;
-      background:linear-gradient(145deg, #0a0a12, #020204);
-      box-shadow:inset 0 0 0 4px #1a1a22, inset 0 0 0 8px rgba(0,255,157,.2), var(--shadow);
-      overflow:hidden;
-      border:3px solid #223322;
-    }
-    .bezel:before,.bezel:after{
-      content:""; position:absolute; inset:-8px; border-radius:18px;
-      border:2px solid rgba(255,0,55,.45); filter:blur(5px); opacity:.6; pointer-events:none;
-    }
-    .bezel:after{inset:-16px; border-color:rgba(0,255,157,.35); opacity:.4}
-
-    .reflection{
-      pointer-events:none; position:absolute; inset:0; z-index:1;
-      background:linear-gradient(135deg, rgba(255,255,255,.12) 10%, transparent 45%);
-      opacity:.15;
-    }
-
-    .ambient-light{
-      pointer-events:none; position:absolute; inset:-30%; z-index:-1;
-      background:conic-gradient(from 30deg at 50% 40%, rgba(0,255,157,.12), rgba(255,0,55,.08), rgba(0,255,157,.12));
-      filter:blur(70px);
-      animation:sweep 30s linear infinite;
-      opacity:.55;
-    }
-    @keyframes sweep{to{transform:rotate(360deg)}}
-
-    .bezel > *{ position:relative; z-index:2 }
-
-    /* DOS top bar */
-    .dos-bar{
-      background:#112211; border-bottom:3px solid #00ff9d;
-      padding:6px 14px; font-size:13px; color:#00ff9d; font-family:'Press Start 2P', monospace;
-      display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;
-      box-shadow:0 2px 8px rgba(0,255,157,.3);
-    }
-
-    header{text-align:center; padding:12px 0 8px;}
-    header .logo{width:120px; height:120px; border-radius:50%; border:5px solid #223322; box-shadow:var(--glow);}
-    h1,h2,h3{font-family:'Press Start 2P', monospace; letter-spacing:.08em;}
-    h1{color:var(--accent); text-shadow:var(--glow); font-size:clamp(22px,3.4vw,36px); margin:12px 0 4px;}
-    .sub{color:var(--muted); font-size:13px; margin-bottom:16px; text-shadow:0 0 6px var(--dos-green);}
-
-    .ribbon{display:flex; gap:6px; flex-wrap:wrap; justify-content:center; padding:8px; background:#111811; border:2px solid #334433; border-radius:6px;}
-    .ribbon a, .wallet-btn{
-      color:var(--accent-2); background:#0a140a; border:2px solid #00ff9d;
-      padding:8px 14px; border-radius:4px; font-size:10px; text-decoration:none; font-family:'Press Start 2P';
-      transition:all .15s;
-    }
-    .ribbon a:hover, .wallet-btn:hover{
-      background:#00ff9d; color:#001100; box-shadow:0 0 14px var(--dos-green); transform:translateY(-1px);
-    }
-
-    .ticker{margin:12px 0; border:2px solid #334433; background:#0a140a; padding:4px 8px; white-space:nowrap; overflow:hidden;}
-    .ticker-inner{animation:marq 35s linear infinite;}
-    .dot{color:#ff0037}
-
-    section{
-      background:#0f140f; border:3px solid #334433;
-      border-radius:var(--radius); padding:16px; margin:18px 0; box-shadow:var(--shadow);
-      position:relative;
-    }
-    .section-title{
-      display:flex; align-items:center; gap:8px; margin-bottom:12px;
-      background:#112211; padding:6px 12px; border-bottom:2px solid var(--dos-green);
-    }
-    .section-title h2{font-size:clamp(13px,2.2vw,17px); margin:0; color:var(--dos-green); text-shadow:0 0 8px var(--dos-green);}
-    .led{width:11px; height:11px; border-radius:50%; background:#00ff9d; box-shadow:0 0 12px #00ff9d; animation:blink 1.2s infinite;}
-
-    .description p{line-height:1.65; color:#bbffdd;}
-    .muted{color:var(--muted)}
-    .stats{display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:12px;}
-    .stat{background:#111811; border:2px solid #334433; border-radius:6px; padding:14px; text-align:center;}
-    .stat .num{font-family:'Press Start 2P'; color:#00ff9d; font-size:22px;}
-
-    .gallery{display:grid; gap:12px; grid-template-columns:repeat(auto-fit, minmax(170px,1fr));}
-    .gallery img{width:100%; border:3px solid #334433; border-radius:4px; image-rendering:pixelated; transition:all .2s;}
-    .gallery img:hover{transform:scale(1.05); box-shadow:0 0 18px var(--dos-green); filter:brightness(1.15);}
-
-    .item{background:#111811; border:2px solid #334433; border-radius:6px; padding:12px; transition:all .2s;}
-    .item:hover{border-color:#00ff9d; background:#1a221a;}
-
-    footer{
-      text-align:center; color:#55cc88; font-size:11px; padding:40px 12px 70px;
-      font-family:'Press Start 2P', monospace;
-    }
-
-    .start{
-      position:absolute; inset:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
-      background:rgba(8,18,8,.94); border:4px solid #00ff9d; border-radius:8px; z-index:98;
-      box-shadow:inset 0 0 80px rgba(0,0,0,.8), 0 0 40px rgba(0,255,157,.3);
-      text-align:center;
-    }
-    .start h2{font:24px/1 "Press Start 2P", monospace; color:#00ff9d; text-shadow:0 0 20px #00ff9d; margin:0;}
-    .start button{
-      font:15px/1 "Press Start 2P", monospace; cursor:pointer;
-      padding:14px 24px; border:3px solid #00ff9d; background:#001100; color:#aaffcc;
-      box-shadow:0 0 20px #00ff9d;
-    }
-
-    @keyframes blink{50%{opacity:0.2}}
-    @keyframes marq{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
-
-    @media (prefers-reduced-motion: reduce){
-      .ticker-inner, .ambient-light, .crt:before{animation:none}
-    }
+    html,body{height:100%; margin:0; background:var(--bg); color:var(--text); font-family:'Courier New', monospace;}
+    .crt:before{content:""; position:fixed; inset:0; z-index:9999; background:repeating-linear-gradient(transparent 0 3px, rgba(0,0,0,.18) 3px 4px); mix-blend-mode:multiply; opacity:.25; pointer-events:none;}
+    .cabinet{max-width:1100px; margin:20px auto; padding:0 12px;}
+    .bezel{background:linear-gradient(145deg, #0a0a12, #020204); border:3px solid #223322; border-radius:12px; padding:14px; box-shadow:0 10px 25px rgba(0,0,0,.7); position:relative; overflow:hidden;}
+    .bezel > *{position:relative; z-index:2;}
+    header{text-align:center; padding:12px 0;}
+    h1{font-family:'Press Start 2P', monospace; color:#ff0037; text-shadow:var(--glow); font-size:clamp(24px, 3.5vw, 38px);}
+    .ribbon{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; background:#111811; border:2px solid #334433; padding:10px; border-radius:6px;}
+    .wallet-btn{color:#001100; background:#00ff9d; border:2px solid #00ff9d; padding:10px 20px; font-family:'Press Start 2P'; font-size:12px; cursor:pointer;}
+    section{background:#0f140f; border:3px solid #334433; border-radius:8px; padding:20px; margin:20px 0;}
+    .section-title{display:flex; align-items:center; gap:8px; background:#112211; padding:8px 12px; border-bottom:2px solid #00ff9d; margin-bottom:16px;}
+    .led{width:12px; height:12px; background:#00ff9d; border-radius:50%; box-shadow:0 0 12px #00ff9d; animation:blink 1.2s infinite;}
+    @keyframes blink{50%{opacity:0.3}}
+    .item{background:#111811; border:2px solid #334433; padding:16px; margin-bottom:16px; border-radius:6px;}
+    select, input, button{font-family:'Press Start 2P', monospace; padding:10px; margin:6px 0; background:#001100; color:#00ff9d; border:2px solid #00ff9d;}
+    button{width:100%; cursor:pointer;}
   </style>
 </head>
 <body class="crt">
-  <div class="grid" aria-hidden="true"></div>
-
   <div class="cabinet">
     <div class="bezel">
-      <!-- effect layers -->
-      <div class="ambient-light" aria-hidden="true"></div>
-      <div class="reflection" aria-hidden="true"></div>
-
-      <!-- DOS Top Bar -->
-      <div class="dos-bar">
-        <span>C:\SQUISHEYEZ&gt; HUB.EXE</span>
-        <span>SquishEyez × Sk8Coin v1.337</span>
-      </div>
 
       <header>
-        <img class="logo" src="https://pbs.twimg.com/profile_images/1788039407741648896/TtNCpsSt.jpg" alt="SquishEyez logo">
-        <h1>SquishEyeZ</h1>
-        <p class="sub">Squish the metaverse • Official Sk8Coin board designer • Long-term utility hub on WAX</p>
-        
-        <nav class="ribbon" id="nav">
-          <a href="#about">ABOUT</a>
-          <a href="#stats">STATS</a>
-          <a href="#gallery">GALLERY</a>
-          <a href="#squish">$SQUISH</a>
-          <a href="#blends">BLENDS</a>
-          <a href="#farms">FARMS</a>
-          <a href="#dao">DAO</a>
-          <a href="#sk8collab">SK8 COLLAB</a>
-          <a href="#drops">DROPS</a>
-          <a href="#links">LINKS</a>
+        <h1>SQUISH EYEZ × SK8COIN</h1>
+        <p style="color:#55cc88; font-size:13px;">$SQUISH FARMS RECOVERY HUB • farms.waxdao</p>
+        <nav class="ribbon">
           <button class="wallet-btn" id="connectWallet">CONNECT WALLET</button>
         </nav>
-
-        <div class="ticker"><div id="ticker" class="ticker-inner"><span>Loading live stats…</span></div></div>
       </header>
 
-      <!-- ABOUT -->
-      <section id="about" class="description">
-        <div class="section-title"><span class="led"></span><h2>About SquishEyez</h2></div>
-        <p><strong>Adopt a Squisheye.</strong> Born from the “Big Squish,” these 90s pixel lifeforms escaped into the WAX blockchain. Now they’re back — stronger, squishier, and officially tied to the Sk8Coin ecosystem.</p>
-        <p><strong>The Collab.</strong> SquishEyez designed one of the official Sk8Coin skateboards. This hub connects both projects with cross-utility, rewards, and shared future.</p>
-        <p><strong>Series &amp; Utility.</strong> Genesis 1/1s by @buttzwithaZ + Season 2 Shardz. Stake, blend, govern via DAO, and earn through the Sk8Coin partnership.</p>
-        <p><strong>Community &amp; Perks.</strong> DAO governance, airdrops, competitions, and special drops for key holders.</p>
-        <p style="font-family:'Press Start 2P'; font-size:11px; color:#00ff95; margin:14px 0 0;">C:\SQUISH&gt; _</p>
-      </section>
-
-      <!-- STATS -->
-      <section id="stats" aria-labelledby="stats-title">
-        <div class="section-title"><span class="led"></span><h2 id="stats-title">Collection Stats</h2></div>
-        <div class="stats">
-          <div class="stat"><h3>Total Assets</h3><div class="num" id="stat-assets">17.3K</div></div>
-          <div class="stat"><h3>Owners</h3><div class="num" id="stat-owners">195</div></div>
-          <div class="stat"><h3>Blockchain</h3><div class="num">WAX</div></div>
+      <!-- FARMS SECTION -->
+      <section id="farms">
+        <div class="section-title"><span class="led"></span><h2>$SQUISH FARMS — RECOVERY ACTIVE</h2></div>
+        
+        <div id="wallet-status" style="background:#001100; padding:14px; text-align:center; border:2px solid #00ff9d; margin-bottom:20px; font-family:'Press Start 2P'; font-size:13px;">
+          Wallet not connected — Connect to enable farm actions
         </div>
-      </section>
 
-      <!-- GALLERY -->
-      <section id="gallery" aria-labelledby="gallery-title">
-        <div class="section-title"><span class="led"></span><h2 id="gallery-title">Gallery</h2></div>
-        <div class="gallery">
-          <img src="https://ipfs.neftyblocks.io/ipfs/QmNjE4zmvTh6SK6yusTspi4cgNqKkgCoz2Mc25VCruh8Ud" alt="SquishEyez 1">
-          <img src="https://ipfs.neftyblocks.io/ipfs/QmWFFMCmLiqmz9AkQF4nyzNKiR12GXFGdbjBqFEqzkyTc6" alt="SquishEyez 2">
-          <img src="https://ipfs.neftyblocks.io/ipfs/QmVMRAcFY15UNbbvDf3NNUHoN3RvCRNcsT8gNttUaR9ony" alt="SquishEyez 3">
-          <img src="https://ipfs.neftyblocks.io/ipfs/QmRSkAy4M4GUiVDxsiif3DH86hzir8Jk4wCGZpDTeL1nC7" alt="SquishEyez 4">
-          <img src="https://ipfs.neftyblocks.io/ipfs/QmUq61ZJgy2mkYQy6VWQ9o86Ek8XexyiZPTBpA3CKYA9j1" alt="SquishEyez 5">
-          <img src="https://ipfs.neftyblocks.io/ipfs/QmctzxUsSuTiie6tAtmmvSEzaEnxa6bk3uECNzzNQNz5jS" alt="SquishEyez 6">
-          <img src="https://ipfs.neftyblocks.io/ipfs/QmWCBLTPZFPCKc5ZTNTCoftB5eKNae5aAdJpb7gUpnVhG9" alt="SquishEyez 7">
-          <img src="https://ipfs.neftyblocks.io/ipfs/QmW37YUasmF21gcp4w4u5EUdD2Z8cyyedwjavGYHsjTq3Y" alt="SquishEyez 8">
-          <img src="https://ipfs.neftyblocks.io/ipfs/Qme3gS6qP3xTvhri5aWNfhZQeWgS5WJfsSTnYmaYfawuHL" alt="Sk8Coin SquishEyez Deck">
+        <div class="item">
+          <label>Select Farm:</label><br>
+          <select id="farmSelect" style="width:100%;">
+            <option value="squish.bat">squish.bat — OG SquishEyez (best rewards)</option>
+            <option value="squish2.exe">squish2.exe — Floppy / 5.25" assets</option>
+          </select>
+
+          <div style="margin-top:16px;">
+            <button onclick="claimRewards()">CLAIM REWARDS</button>
+            <button onclick="stakeAssets()" style="margin-top:8px;">STAKE ASSETS</button>
+            <button onclick="unstakeAssets()" style="margin-top:8px;">UNSTAKE ASSETS</button>
+          </div>
+
+          <div style="margin-top:12px;">
+            <label>Asset ID(s) for Stake / Unstake:</label><br>
+            <input type="text" id="assetInput" placeholder="e.g. 12345 or 12345,67890" style="width:100%;">
+            <small style="color:#88ccaa;">Leave blank for Claim only</small>
+          </div>
         </div>
+
+        <p style="font-size:11px; color:#55cc88; margin-top:20px; text-align:center;">
+          Contract: <strong>farms.waxdao</strong> • Token: <strong>ribbitartwrk</strong><br>
+          All actions signed directly on the WAX blockchain
+        </p>
       </section>
 
-      <!-- $SQUISH -->
-      <section id="squish" aria-labelledby="squish-title" class="bl">
-        <div class="section-title"><span class="led"></span><h2 id="squish-title">$SQUISH Token</h2></div>
-        <ul class="links">
-          <li class="item"><a href="https://eosauthority.com/tokens/ribbitartwrk/SQUISH?network=wax" target="_blank" rel="noopener">$SQUISH on EOS Authority</a></li>
-          <li class="item"><a href="https://waxdao.io/blends/1775" target="_blank" rel="noopener">Unwrap 69× $SQUISH → NFT</a></li>
-          <li class="item"><a href="https://waxdao.io/blends/1718" target="_blank" rel="noopener">Wrap NFT → 69× $SQUISH</a></li>
-        </ul>
+      <!-- Teasers -->
+      <section style="opacity:0.75;">
+        <div class="section-title"><span class="led"></span><h2>NEXT PHASES</h2></div>
+        <p>Blends • Shard Pack Opening • DAO • Sk8Coin Collab</p>
       </section>
 
-      <!-- BLENDS, FARMS, DAO, SK8 COLLAB, DROPS, LINKS sections remain the same as your previous version -->
-      <!-- (I kept them exactly as they were in your last clean paste for consistency) -->
-
-      <!-- BLENDS -->
-      <section id="blends" aria-labelledby="blends-title" class="bl">
-        <div class="section-title"><span class="led"></span><h2 id="blends-title">Blends</h2></div>
-        <p class="muted">Fuse your Shardz into full SquishEyez using Blend Diskettez. All blends now run through WAXDAO.</p>
-        <ul class="links">
-          <!-- All your blend links here (same as before) -->
-          <li class="item"><a href="https://waxdao.io/blends/1876" target="_blank" rel="noopener">Piece V9.0 · Doodlez</a></li>
-          <!-- ... (I kept the full list in your file) ... -->
-        </ul>
-      </section>
-
-      <!-- FARMS, DAO, SK8 COLLAB, DROPS, LINKS are unchanged from your last version. They are all included in the file you sent. -->
-
-      <!-- LINKS -->
-      <section id="links" class="links" aria-labelledby="links-title">
-        <div class="section-title"><span class="led"></span><h2 id="links-title">Official Links</h2></div>
-        <ul class="links">
-          <li class="item"><a href="https://wax.atomichub.io/explorer/collection/ssquisheyezz" target="_blank" rel="noopener">AtomicHub — SquishEyez</a></li>
-          <li class="item"><a href="https://wax.atomichub.io/explorer/collection/skatecoinwax" target="_blank" rel="noopener">AtomicHub — Sk8Coin</a></li>
-          <li class="item"><a href="https://waxdao.io" target="_blank" rel="noopener">WAXDAO</a></li>
-          <li class="item"><a href="https://nfthive.io/collection/ssquisheyezz" target="_blank" rel="noopener">NFTHive</a></li>
-          <li class="item"><a href="https://twitter.com/SquishEyez" target="_blank" rel="noopener">@SquishEyez on X</a></li>
-          <li class="item"><a href="https://discord.com/invite/n8ZfNSen" target="_blank" rel="noopener">Discord</a></li>
-        </ul>
-      </section>
-
-      <footer>
-        <p>&copy; 2025 Next Door Media (UK) • SquishEyez × Sk8Coin</p>
-        <p style="font-size:10px; margin-top:8px; opacity:0.7;">Permanent community-owned hub • Built to outlive abandoned platforms</p>
+      <footer style="text-align:center; padding:30px; color:#55cc88; font-size:11px;">
+        &copy; 2025 Next Door Media (UK) • SquishEyez Permanent Hub
       </footer>
-
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@waxio/waxjs@1.0.0/dist-web/waxjs.js"></script>
-<script>
-  /* Navigation and PRESS START (keep your existing code) */
+  <script>
+    let waxInstance = null;
+    let userAccount = null;
 
-  /* === IMPROVED WALLET CONNECTION === */
-  let waxInstance = null;
-  let userAccount = null;
-  const walletBtn = document.getElementById('connectWallet');
+    const walletBtn = document.getElementById('connectWallet');
+    const statusEl = document.getElementById('wallet-status');
 
-  async function connectWallet() {
-    if (userAccount) {
-      alert(`Already connected as: ${userAccount}`);
-      return;
-    }
-
-    try {
-      waxInstance = new waxjs.WaxJS({
-        rpcEndpoint: 'https://wax.greymass.com',
-        tryAutoLogin: true   // tries to restore previous session
-      });
-
-      userAccount = await waxInstance.login();
-      
-      walletBtn.innerHTML = `✅ <strong>${userAccount}</strong>`;
-      walletBtn.style.background = '#00ff9d';
-      walletBtn.style.color = '#001100';
-
-      console.log('✅ Connected:', userAccount);
-      alert(`Wallet connected successfully!\nAccount: ${userAccount}\n\nYou can now perform on-chain actions (blends, staking, etc.) once we add the buttons.`);
-
-    } catch (err) {
-      console.error(err);
-      if (err.message?.includes("user rejected")) {
-        alert("Connection cancelled by user.");
-      } else {
-        alert("Could not connect to WAX Cloud Wallet.\n\nMake sure you have a My Cloud Wallet account and try again.");
+    async function connectWallet() {
+      try {
+        waxInstance = new waxjs.WaxJS({ rpcEndpoint: 'https://wax.greymass.com', tryAutoLogin: true });
+        userAccount = await waxInstance.login();
+        statusEl.innerHTML = `✅ CONNECTED: <strong>${userAccount}</strong>`;
+        statusEl.style.color = '#00ff9d';
+        walletBtn.textContent = `✅ ${userAccount}`;
+      } catch (e) {
+        console.error(e);
+        alert("Connection failed or cancelled.");
       }
     }
-  }
 
-  walletBtn.addEventListener('click', connectWallet);
+    // Helper to get selected farm
+    function getSelectedFarm() {
+      return document.getElementById('farmSelect').value;
+    }
 
-  /* Rest of your ticker + other scripts */
-</script>
+    async function claimRewards() {
+      if (!userAccount) return alert("Please connect wallet first");
+      const farm = getSelectedFarm();
+      if (!confirm(`Claim rewards from ${farm}?`)) return;
+
+      try {
+        const result = await waxInstance.api.transact({
+          actions: [{
+            account: "farms.waxdao",
+            name: "claim",
+            authorization: [{ actor: userAccount, permission: "active" }],
+            data: { user: userAccount, farmname: farm }
+          }]
+        }, { blocksBehind: 3, expireSeconds: 30 });
+
+        alert(`✅ Claim successful!\nTx: ${result.transaction_id}`);
+      } catch (err) {
+        alert("Claim failed: " + (err.message || err));
+      }
+    }
+
+    async function stakeAssets() {
+      if (!userAccount) return alert("Please connect wallet first");
+      const farm = getSelectedFarm();
+      const assetStr = document.getElementById('assetInput').value.trim();
+      if (!assetStr) return alert("Enter Asset ID(s) to stake");
+
+      const assetIds = assetStr.split(',').map(id => parseInt(id.trim()));
+
+      try {
+        const result = await waxInstance.api.transact({
+          actions: [{
+            account: "farms.waxdao",
+            name: "stake",
+            authorization: [{ actor: userAccount, permission: "active" }],
+            data: { user: userAccount, farmname: farm, asset_ids: assetIds }
+          }]
+        }, { blocksBehind: 3, expireSeconds: 30 });
+
+        alert(`✅ Stake successful!\nTx: ${result.transaction_id}`);
+      } catch (err) {
+        alert("Stake failed: " + (err.message || err));
+      }
+    }
+
+    async function unstakeAssets() {
+      if (!userAccount) return alert("Please connect wallet first");
+      const farm = getSelectedFarm();
+      const assetStr = document.getElementById('assetInput').value.trim();
+      if (!assetStr) return alert("Enter Asset ID(s) to unstake");
+
+      const assetIds = assetStr.split(',').map(id => parseInt(id.trim()));
+
+      try {
+        const result = await waxInstance.api.transact({
+          actions: [{
+            account: "farms.waxdao",
+            name: "unstake",
+            authorization: [{ actor: userAccount, permission: "active" }],
+            data: { user: userAccount, farmname: farm, asset_ids: assetIds }
+          }]
+        }, { blocksBehind: 3, expireSeconds: 30 });
+
+        alert(`✅ Unstake successful!\nTx: ${result.transaction_id}`);
+      } catch (err) {
+        alert("Unstake failed: " + (err.message || err));
+      }
+    }
+
+    walletBtn.addEventListener('click', connectWallet);
+  </script>
 </body>
 </html>
