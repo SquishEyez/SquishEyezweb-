@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SquishEyez × Sk8Coin | $SQUISH Farms Recovery</title>
+  <title>SquishEyeZ | $SQUISH Farms Recovery</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
   <style>
     :root{
@@ -20,17 +20,17 @@
     .cabinet{max-width:1100px; margin:20px auto; padding:0 12px;}
     .bezel{background:linear-gradient(145deg, #0a0a12, #020204); border:3px solid #223322; border-radius:12px; padding:14px; box-shadow:0 10px 25px rgba(0,0,0,.7); position:relative; overflow:hidden;}
     .bezel > *{position:relative; z-index:2;}
-    header{text-align:center; padding:12px 0;}
-    h1{font-family:'Press Start 2P', monospace; color:#ff0037; text-shadow:var(--glow); font-size:clamp(24px, 3.5vw, 38px);}
+    header{text-align:center; padding:20px 0 10px;}
+    h1{font-family:'Press Start 2P', monospace; color:#ff0037; text-shadow:var(--glow); font-size:clamp(28px, 4vw, 42px); letter-spacing:2px;}
     .ribbon{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; background:#111811; border:2px solid #334433; padding:10px; border-radius:6px;}
-    .wallet-btn{color:#001100; background:#00ff9d; border:2px solid #00ff9d; padding:10px 20px; font-family:'Press Start 2P'; font-size:12px; cursor:pointer;}
+    .wallet-btn{color:#001100; background:#00ff9d; border:2px solid #00ff9d; padding:12px 24px; font-family:'Press Start 2P'; font-size:13px; cursor:pointer; width:100%; max-width:320px;}
     section{background:#0f140f; border:3px solid #334433; border-radius:8px; padding:20px; margin:20px 0;}
     .section-title{display:flex; align-items:center; gap:8px; background:#112211; padding:8px 12px; border-bottom:2px solid #00ff9d; margin-bottom:16px;}
     .led{width:12px; height:12px; background:#00ff9d; border-radius:50%; box-shadow:0 0 12px #00ff9d; animation:blink 1.2s infinite;}
     @keyframes blink{50%{opacity:0.3}}
     .item{background:#111811; border:2px solid #334433; padding:16px; margin-bottom:16px; border-radius:6px;}
-    select, input, button{font-family:'Press Start 2P', monospace; padding:10px; margin:6px 0; background:#001100; color:#00ff9d; border:2px solid #00ff9d;}
-    button{width:100%; cursor:pointer;}
+    select, input, button{font-family:'Press Start 2P', monospace; padding:12px; margin:6px 0; background:#001100; color:#00ff9d; border:2px solid #00ff9d; width:100%;}
+    button{cursor:pointer;}
   </style>
 </head>
 <body class="crt">
@@ -38,7 +38,7 @@
     <div class="bezel">
 
       <header>
-        <h1>SQUISH EYEZ × SK8COIN</h1>
+        <h1>SQUISH EYEZ</h1>
         <p style="color:#55cc88; font-size:13px;">$SQUISH FARMS RECOVERY HUB • farms.waxdao</p>
         <nav class="ribbon">
           <button class="wallet-btn" id="connectWallet">CONNECT WALLET</button>
@@ -55,7 +55,7 @@
 
         <div class="item">
           <label>Select Farm:</label><br>
-          <select id="farmSelect" style="width:100%;">
+          <select id="farmSelect">
             <option value="squish.bat">squish.bat — OG SquishEyez (best rewards)</option>
             <option value="squish2.exe">squish2.exe — Floppy / 5.25" assets</option>
           </select>
@@ -66,16 +66,16 @@
             <button onclick="unstakeAssets()" style="margin-top:8px;">UNSTAKE ASSETS</button>
           </div>
 
-          <div style="margin-top:12px;">
+          <div style="margin-top:16px;">
             <label>Asset ID(s) for Stake / Unstake:</label><br>
-            <input type="text" id="assetInput" placeholder="e.g. 12345 or 12345,67890" style="width:100%;">
-            <small style="color:#88ccaa;">Leave blank for Claim only</small>
+            <input type="text" id="assetInput" placeholder="e.g. 12345 or 12345,67890">
+            <small style="color:#88ccaa;">Leave blank when only claiming rewards</small>
           </div>
         </div>
 
         <p style="font-size:11px; color:#55cc88; margin-top:20px; text-align:center;">
           Contract: <strong>farms.waxdao</strong> • Token: <strong>ribbitartwrk</strong><br>
-          All actions signed directly on the WAX blockchain
+          <strong>Tip:</strong> Cloud Wallet recommended. Anchor users — make sure the Anchor browser extension is active.
         </p>
       </section>
 
@@ -86,7 +86,7 @@
       </section>
 
       <footer style="text-align:center; padding:30px; color:#55cc88; font-size:11px;">
-        &copy; 2025 Next Door Media (UK) • SquishEyez Permanent Hub
+        &copy; 2025 Next Door Media (UK) • SquishEyeZ Permanent Hub
       </footer>
     </div>
   </div>
@@ -101,18 +101,27 @@
 
     async function connectWallet() {
       try {
-        waxInstance = new waxjs.WaxJS({ rpcEndpoint: 'https://wax.greymass.com', tryAutoLogin: true });
+        waxInstance = new waxjs.WaxJS({ 
+          rpcEndpoint: 'https://wax.greymass.com', 
+          tryAutoLogin: true 
+        });
+        
         userAccount = await waxInstance.login();
+        
         statusEl.innerHTML = `✅ CONNECTED: <strong>${userAccount}</strong>`;
         statusEl.style.color = '#00ff9d';
         walletBtn.textContent = `✅ ${userAccount}`;
+        walletBtn.style.background = '#00cc7a';
       } catch (e) {
         console.error(e);
-        alert("Connection failed or cancelled.");
+        if (e.message && e.message.includes("cancel")) {
+          statusEl.innerHTML = `❌ Connection cancelled by user`;
+        } else {
+          statusEl.innerHTML = `❌ Connection failed.<br><small>Make sure you have My Cloud Wallet installed.<br>Anchor users: use the Anchor extension.</small>`;
+        }
       }
     }
 
-    // Helper to get selected farm
     function getSelectedFarm() {
       return document.getElementById('farmSelect').value;
     }
@@ -132,7 +141,7 @@
           }]
         }, { blocksBehind: 3, expireSeconds: 30 });
 
-        alert(`✅ Claim successful!\nTx: ${result.transaction_id}`);
+        alert(`✅ Claim successful!\nTx ID: ${result.transaction_id}`);
       } catch (err) {
         alert("Claim failed: " + (err.message || err));
       }
@@ -156,7 +165,7 @@
           }]
         }, { blocksBehind: 3, expireSeconds: 30 });
 
-        alert(`✅ Stake successful!\nTx: ${result.transaction_id}`);
+        alert(`✅ Stake successful!\nTx ID: ${result.transaction_id}`);
       } catch (err) {
         alert("Stake failed: " + (err.message || err));
       }
@@ -180,7 +189,7 @@
           }]
         }, { blocksBehind: 3, expireSeconds: 30 });
 
-        alert(`✅ Unstake successful!\nTx: ${result.transaction_id}`);
+        alert(`✅ Unstake successful!\nTx ID: ${result.transaction_id}`);
       } catch (err) {
         alert("Unstake failed: " + (err.message || err));
       }
