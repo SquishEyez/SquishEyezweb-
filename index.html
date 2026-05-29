@@ -39,7 +39,7 @@
 
       <header>
         <h1>SQUISH EYEZ</h1>
-        <p style="color:#55cc88; font-size:13px;">$SQUISH FARMS + WRAP/UNWRAP HUB • farms.waxdao</p>
+        <p style="color:#55cc88; font-size:13px;">$SQUISH FARMS + WRAP/UNWRAP HUB</p>
         <nav class="ribbon">
           <button class="wallet-btn" id="connectWallet">CONNECT WALLET</button>
         </nav>
@@ -72,15 +72,22 @@
         </div>
       </section>
 
-      <!-- NEW: WRAP / UNWRAP SECTION -->
+      <!-- WRAP / UNWRAP SECTION -->
       <section id="wrapunwrap">
         <div class="section-title"><span class="led"></span><h2>$SQUISH WRAP / UNWRAP</h2></div>
-        <p style="margin-bottom:16px;">Original WAXDAO mechanics — now directly on-chain.</p>
         
         <div class="item">
-          <button onclick="unwrapSQUISH()" style="background:#330000; border-color:#ff5555;">UNWRAP — 69 $SQUISH → NFT</button>
-          <button onclick="wrapSQUISH()" style="margin-top:8px;">WRAP — NFT + Diskette → 69 $SQUISH</button>
-          <small style="display:block; margin-top:12px; color:#88ccaa;">Uses original blend IDs (1775 / 1718) via WAXDAO contract system</small>
+          <button onclick="unwrapSQUISH()" style="background:#330000; border-color:#ff5555; margin-bottom:12px;">
+            UNWRAP — Burn Wrapped NFT → Receive 69 $SQUISH
+          </button>
+          <button onclick="wrapSQUISH()">
+            WRAP — 69 $SQUISH + Diskette → Wrapped NFT
+          </button>
+          
+          <small style="display:block; margin-top:16px; color:#88ccaa; line-height:1.4;">
+            • Unwrap: Burn 1 Wrapped NFT (that represents 69 $SQUISH) → Receive 69 $SQUISH tokens<br>
+            • Wrap: Deposit 69 $SQUISH tokens + 1 Diskette NFT → Receive 1 Wrapped NFT
+          </small>
         </div>
       </section>
 
@@ -122,51 +129,44 @@
       return document.getElementById('farmSelect').value;
     }
 
-    // === FARM FUNCTIONS (same as before) ===
-    async function claimRewards() { /* ... same as previous version ... */ 
-      if (!userAccount) return alert("Connect wallet first");
+    // Farm functions (kept minimal for now)
+    async function claimRewards() {
+      if (!userAccount) return alert("Please connect wallet first");
       const farm = getSelectedFarm();
-      if (!confirm(`Claim from ${farm}?`)) return;
+      if (!confirm(`Claim rewards from ${farm}?`)) return;
       try {
         const result = await waxInstance.api.transact({
           actions: [{ account: "farms.waxdao", name: "claim", authorization: [{ actor: userAccount, permission: "active" }], data: { user: userAccount, farmname: farm } }]
         }, { blocksBehind: 3, expireSeconds: 30 });
-        alert(`✅ Claim successful!\nTx: ${result.transaction_id}`);
+        alert(`✅ Claim successful!\nTx ID: ${result.transaction_id}`);
       } catch (err) { alert("Claim failed: " + (err.message || err)); }
     }
 
-    async function stakeAssets() { /* same logic as before */ 
-      if (!userAccount) return alert("Connect wallet first");
-      // ... (full stake code from previous version)
-      alert("Stake function ready — needs exact asset_ids format confirmation");
-    }
+    async function stakeAssets() { alert("Stake function ready (needs exact parameters)"); }
+    async function unstakeAssets() { alert("Unstake function ready (needs exact parameters)"); }
 
-    async function unstakeAssets() { /* same */ 
-      alert("Unstake function ready");
-    }
-
-    // === NEW: WRAP / UNWRAP FUNCTIONS ===
+    // Updated Wrap / Unwrap with your exact description
     async function unwrapSQUISH() {
-      if (!userAccount) return alert("Connect wallet first");
-      if (!confirm("Unwrap 69 $SQUISH → NFT (Blend 1775)?")) return;
+      if (!userAccount) return alert("Please connect wallet first");
+      if (!confirm("UNWRAP: Burn 1 Wrapped NFT → Receive 69 $SQUISH tokens\n\nBlend ID 1775")) return;
       try {
         const result = await waxInstance.api.transact({
           actions: [{
-            account: "waxdao",           // most common for WAXDAO blends
+            account: "waxdao",
             name: "blend",
             authorization: [{ actor: userAccount, permission: "active" }],
             data: { blend_id: 1775, owner: userAccount }
           }]
         }, { blocksBehind: 3, expireSeconds: 30 });
-        alert(`✅ Unwrap transaction sent!\nTx: ${result.transaction_id}`);
+        alert(`✅ Unwrap transaction sent!\nTx ID: ${result.transaction_id}`);
       } catch (err) {
         alert("Unwrap failed: " + (err.message || err));
       }
     }
 
     async function wrapSQUISH() {
-      if (!userAccount) return alert("Connect wallet first");
-      if (!confirm("Wrap NFT + Diskette → 69 $SQUISH (Blend 1718)?")) return;
+      if (!userAccount) return alert("Please connect wallet first");
+      if (!confirm("WRAP: Deposit 69 $SQUISH + 1 Diskette NFT → Receive 1 Wrapped NFT\n\nBlend ID 1718")) return;
       try {
         const result = await waxInstance.api.transact({
           actions: [{
@@ -176,7 +176,7 @@
             data: { blend_id: 1718, owner: userAccount }
           }]
         }, { blocksBehind: 3, expireSeconds: 30 });
-        alert(`✅ Wrap transaction sent!\nTx: ${result.transaction_id}`);
+        alert(`✅ Wrap transaction sent!\nTx ID: ${result.transaction_id}`);
       } catch (err) {
         alert("Wrap failed: " + (err.message || err));
       }
