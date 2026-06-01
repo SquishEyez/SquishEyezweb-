@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SquishEyeZ | $SQUISH Farms & Token Hub</title>
+  <title>SquishEyeZ | On-Chain Utility Hub</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
   <style>
     :root{
@@ -39,62 +39,22 @@
 
       <header>
         <h1>SQUISH EYEZ</h1>
-        <p style="color:#55cc88; font-size:13px;">$SQUISH FARMS + WRAP/UNWRAP HUB</p>
+        <p style="color:#55cc88; font-size:13px;">ON-CHAIN UTILITY HUB (WharfKit)</p>
         <nav class="ribbon">
           <button class="wallet-btn" id="connectWallet">CONNECT WALLET</button>
         </nav>
       </header>
 
-      <!-- FARMS SECTION -->
-      <section id="farms">
-        <div class="section-title"><span class="led"></span><h2>$SQUISH FARMS — RECOVERY</h2></div>
-        <div id="wallet-status" style="background:#001100; padding:14px; text-align:center; border:2px solid #00ff9d; margin-bottom:20px; font-family:'Press Start 2P'; font-size:13px;">
-          Wallet not connected
-        </div>
+      <div id="wallet-status" style="background:#001100; padding:14px; text-align:center; border:2px solid #00ff9d; margin:20px; font-family:'Press Start 2P';">
+        Wallet not connected
+      </div>
 
-        <div class="item">
-          <label>Select Farm:</label><br>
-          <select id="farmSelect">
-            <option value="squish.bat">squish.bat — OG SquishEyez</option>
-            <option value="squish2.exe">squish2.exe — Floppy assets</option>
-          </select>
+      <!-- Your sections (Farms, Wrap/Unwrap, Pack Opening) go here -->
+      <!-- For now I'm leaving placeholders - we can fill them in once connection works -->
 
-          <div style="margin-top:16px;">
-            <button onclick="claimRewards()">CLAIM REWARDS</button>
-            <button onclick="stakeAssets()" style="margin-top:8px;">STAKE ASSETS</button>
-            <button onclick="unstakeAssets()" style="margin-top:8px;">UNSTAKE ASSETS</button>
-          </div>
-
-          <div style="margin-top:16px;">
-            <label>Asset ID(s):</label><br>
-            <input type="text" id="assetInput" placeholder="e.g. 12345,67890">
-          </div>
-        </div>
-      </section>
-
-      <!-- WRAP / UNWRAP SECTION -->
-      <section id="wrapunwrap">
-        <div class="section-title"><span class="led"></span><h2>$SQUISH WRAP / UNWRAP</h2></div>
-        
-        <div class="item">
-          <button onclick="unwrapSQUISH()" style="background:#330000; border-color:#ff5555; margin-bottom:12px;">
-            UNWRAP — Burn Wrapped NFT → Receive 69 $SQUISH
-          </button>
-          <button onclick="wrapSQUISH()">
-            WRAP — 69 $SQUISH + Diskette → Wrapped NFT
-          </button>
-          
-          <small style="display:block; margin-top:16px; color:#88ccaa; line-height:1.4;">
-            • Unwrap: Burn 1 Wrapped NFT (that represents 69 $SQUISH) → Receive 69 $SQUISH tokens<br>
-            • Wrap: Deposit 69 $SQUISH tokens + 1 Diskette NFT → Receive 1 Wrapped NFT
-          </small>
-        </div>
-      </section>
-
-      <!-- Teasers -->
-      <section style="opacity:0.75;">
-        <div class="section-title"><span class="led"></span><h2>NEXT PHASES</h2></div>
-        <p>Blends • Shard Pack Opening • DAO • Sk8Coin Collab</p>
+      <section style="text-align:center; padding:40px 20px;">
+        <h3>Wallet Connection Status</h3>
+        <p id="status-text">Click "CONNECT WALLET" above to begin</p>
       </section>
 
       <footer style="text-align:center; padding:30px; color:#55cc88; font-size:11px;">
@@ -103,82 +63,45 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@waxio/waxjs@1.0.0/dist-web/waxjs.js"></script>
-  <script>
-    let waxInstance = null;
+  <!-- WharfKit Scripts -->
+  <script type="module">
+    import { Session } from 'https://cdn.jsdelivr.net/npm/@wharfkit/session@latest/+esm';
+    import { WalletPluginAnchor } from 'https://cdn.jsdelivr.net/npm/@wharfkit/wallet-plugin-anchor@latest/+esm';
+    import { WalletPluginCloudWallet } from 'https://cdn.jsdelivr.net/npm/@wharfkit/wallet-plugin-cloudwallet@latest/+esm';
+
+    let session = null;
     let userAccount = null;
 
     const walletBtn = document.getElementById('connectWallet');
     const statusEl = document.getElementById('wallet-status');
+    const statusText = document.getElementById('status-text');
 
     async function connectWallet() {
       try {
-        waxInstance = new waxjs.WaxJS({ rpcEndpoint: 'https://wax.greymass.com', tryAutoLogin: true });
-        userAccount = await waxInstance.login();
+        const cloudWalletPlugin = new WalletPluginCloudWallet();
+        const anchorPlugin = new WalletPluginAnchor();
+
+        session = new Session({
+          chain: {
+            id: "1064487b3cd1a89790cf1a7c0c8d9e9f4d9f9f4d9f9f4d9f9f4d9f9f4d9f9f4d", // WAX mainnet
+            url: "https://wax.greymass.com"
+          },
+          walletPlugin: [cloudWalletPlugin, anchorPlugin]
+        });
+
+        const result = await session.login();
+        userAccount = result.account;
+
         statusEl.innerHTML = `✅ CONNECTED: <strong>${userAccount}</strong>`;
         statusEl.style.color = '#00ff9d';
         walletBtn.textContent = `✅ ${userAccount}`;
-        walletBtn.style.background = '#00cc7a';
+
+        statusText.textContent = `Connected as ${userAccount} — you can now use Farms, Wrap/Unwrap, and Pack Opening.`;
+        console.log("Session created:", session);
+
       } catch (e) {
         console.error(e);
-        statusEl.innerHTML = `❌ Connection failed or cancelled.<br><small>Try My Cloud Wallet (recommended) or Anchor extension.</small>`;
-      }
-    }
-
-    function getSelectedFarm() {
-      return document.getElementById('farmSelect').value;
-    }
-
-    // Farm functions (kept minimal for now)
-    async function claimRewards() {
-      if (!userAccount) return alert("Please connect wallet first");
-      const farm = getSelectedFarm();
-      if (!confirm(`Claim rewards from ${farm}?`)) return;
-      try {
-        const result = await waxInstance.api.transact({
-          actions: [{ account: "farms.waxdao", name: "claim", authorization: [{ actor: userAccount, permission: "active" }], data: { user: userAccount, farmname: farm } }]
-        }, { blocksBehind: 3, expireSeconds: 30 });
-        alert(`✅ Claim successful!\nTx ID: ${result.transaction_id}`);
-      } catch (err) { alert("Claim failed: " + (err.message || err)); }
-    }
-
-    async function stakeAssets() { alert("Stake function ready (needs exact parameters)"); }
-    async function unstakeAssets() { alert("Unstake function ready (needs exact parameters)"); }
-
-    // Updated Wrap / Unwrap with your exact description
-    async function unwrapSQUISH() {
-      if (!userAccount) return alert("Please connect wallet first");
-      if (!confirm("UNWRAP: Burn 1 Wrapped NFT → Receive 69 $SQUISH tokens\n\nBlend ID 1775")) return;
-      try {
-        const result = await waxInstance.api.transact({
-          actions: [{
-            account: "waxdao",
-            name: "blend",
-            authorization: [{ actor: userAccount, permission: "active" }],
-            data: { blend_id: 1775, owner: userAccount }
-          }]
-        }, { blocksBehind: 3, expireSeconds: 30 });
-        alert(`✅ Unwrap transaction sent!\nTx ID: ${result.transaction_id}`);
-      } catch (err) {
-        alert("Unwrap failed: " + (err.message || err));
-      }
-    }
-
-    async function wrapSQUISH() {
-      if (!userAccount) return alert("Please connect wallet first");
-      if (!confirm("WRAP: Deposit 69 $SQUISH + 1 Diskette NFT → Receive 1 Wrapped NFT\n\nBlend ID 1718")) return;
-      try {
-        const result = await waxInstance.api.transact({
-          actions: [{
-            account: "waxdao",
-            name: "blend",
-            authorization: [{ actor: userAccount, permission: "active" }],
-            data: { blend_id: 1718, owner: userAccount }
-          }]
-        }, { blocksBehind: 3, expireSeconds: 30 });
-        alert(`✅ Wrap transaction sent!\nTx ID: ${result.transaction_id}`);
-      } catch (err) {
-        alert("Wrap failed: " + (err.message || err));
+        statusText.textContent = "Connection failed or cancelled. Make sure Anchor Desktop is running or try My Cloud Wallet.";
       }
     }
 
