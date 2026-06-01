@@ -39,22 +39,52 @@
 
       <header>
         <h1>SQUISH EYEZ</h1>
-        <p style="color:#55cc88; font-size:13px;">ON-CHAIN UTILITY HUB (WharfKit)</p>
+        <p style="color:#55cc88; font-size:13px;">ON-CHAIN UTILITY HUB</p>
         <nav class="ribbon">
           <button class="wallet-btn" id="connectWallet">CONNECT WALLET</button>
         </nav>
       </header>
 
-      <div id="wallet-status" style="background:#001100; padding:14px; text-align:center; border:2px solid #00ff9d; margin:20px; font-family:'Press Start 2P';">
+      <div id="wallet-status" style="background:#001100; padding:14px; text-align:center; border:2px solid #00ff9d; margin:20px; font-family:'Press Start 2P'; font-size:13px;">
         Wallet not connected
       </div>
 
-      <!-- Your sections (Farms, Wrap/Unwrap, Pack Opening) go here -->
-      <!-- For now I'm leaving placeholders - we can fill them in once connection works -->
+      <!-- FARMS -->
+      <section id="farms">
+        <div class="section-title"><span class="led"></span><h2>$SQUISH FARMS — RECOVERY</h2></div>
+        <div class="item">
+          <label>Select Farm:</label><br>
+          <select id="farmSelect">
+            <option value="squish.bat">squish.bat — OG SquishEyez</option>
+            <option value="squish2.exe">squish2.exe — Floppy assets</option>
+          </select>
+          <button onclick="claimRewards()" style="margin-top:12px;">CLAIM REWARDS</button>
+          <button onclick="stakeAssets()" style="margin-top:8px;">STAKE ASSETS</button>
+          <button onclick="unstakeAssets()" style="margin-top:8px;">UNSTAKE ASSETS</button>
+        </div>
+      </section>
 
-      <section style="text-align:center; padding:40px 20px;">
-        <h3>Wallet Connection Status</h3>
-        <p id="status-text">Click "CONNECT WALLET" above to begin</p>
+      <!-- WRAP / UNWRAP -->
+      <section id="wrapunwrap">
+        <div class="section-title"><span class="led"></span><h2>$SQUISH WRAP / UNWRAP</h2></div>
+        <div class="item">
+          <button onclick="unwrapSQUISH()" style="background:#330000; border-color:#ff5555; margin-bottom:12px;">
+            UNWRAP — Burn Wrapped NFT → Receive 69 $SQUISH
+          </button>
+          <button onclick="wrapSQUISH()">
+            WRAP — 69 $SQUISH + Diskette → Wrapped NFT
+          </button>
+        </div>
+      </section>
+
+      <!-- PACK OPENING -->
+      <section id="packs">
+        <div class="section-title"><span class="led"></span><h2>OPEN NEFTYBLOCKS PACKS</h2></div>
+        <div class="item">
+          <label>Pack Asset ID:</label><br>
+          <input type="text" id="packInput" placeholder="Enter Pack NFT ID">
+          <button onclick="openPack()" style="margin-top:12px;">OPEN PACK</button>
+        </div>
       </section>
 
       <footer style="text-align:center; padding:30px; color:#55cc88; font-size:11px;">
@@ -63,46 +93,38 @@
     </div>
   </div>
 
-  <!-- WharfKit Scripts -->
-  <script type="module">
-    import { Session } from 'https://cdn.jsdelivr.net/npm/@wharfkit/session@latest/+esm';
-    import { WalletPluginAnchor } from 'https://cdn.jsdelivr.net/npm/@wharfkit/wallet-plugin-anchor@latest/+esm';
-    import { WalletPluginCloudWallet } from 'https://cdn.jsdelivr.net/npm/@wharfkit/wallet-plugin-cloudwallet@latest/+esm';
-
-    let session = null;
+  <script src="https://cdn.jsdelivr.net/npm/@waxio/waxjs@1.0.0/dist-web/waxjs.js"></script>
+  <script>
+    let waxInstance = null;
     let userAccount = null;
 
     const walletBtn = document.getElementById('connectWallet');
     const statusEl = document.getElementById('wallet-status');
-    const statusText = document.getElementById('status-text');
 
     async function connectWallet() {
+      statusEl.innerHTML = "Connecting... Make sure Anchor Desktop is running or use My Cloud Wallet";
       try {
-        const cloudWalletPlugin = new WalletPluginCloudWallet();
-        const anchorPlugin = new WalletPluginAnchor();
-
-        session = new Session({
-          chain: {
-            id: "1064487b3cd1a89790cf1a7c0c8d9e9f4d9f9f4d9f9f4d9f9f4d9f9f4d9f9f4d", // WAX mainnet
-            url: "https://wax.greymass.com"
-          },
-          walletPlugin: [cloudWalletPlugin, anchorPlugin]
-        });
-
-        const result = await session.login();
-        userAccount = result.account;
-
+        waxInstance = new waxjs.WaxJS({ rpcEndpoint: 'https://wax.greymass.com', tryAutoLogin: true });
+        userAccount = await waxInstance.login();
         statusEl.innerHTML = `✅ CONNECTED: <strong>${userAccount}</strong>`;
         statusEl.style.color = '#00ff9d';
         walletBtn.textContent = `✅ ${userAccount}`;
-
-        statusText.textContent = `Connected as ${userAccount} — you can now use Farms, Wrap/Unwrap, and Pack Opening.`;
-        console.log("Session created:", session);
-
       } catch (e) {
-        console.error(e);
-        statusText.textContent = "Connection failed or cancelled. Make sure Anchor Desktop is running or try My Cloud Wallet.";
+        statusEl.innerHTML = `❌ Connection failed.<br><small>1. Run Anchor Desktop<br>2. Or use My Cloud Wallet at mycloudwallet.io</small>`;
       }
+    }
+
+    // Basic placeholders - we can expand these once connection works
+    async function claimRewards() { if (!userAccount) return alert("Connect wallet first"); alert("Claim function ready"); }
+    async function stakeAssets() { if (!userAccount) return alert("Connect wallet first"); alert("Stake function ready"); }
+    async function unstakeAssets() { if (!userAccount) return alert("Connect wallet first"); alert("Unstake function ready"); }
+    async function unwrapSQUISH() { if (!userAccount) return alert("Connect wallet first"); alert("Unwrap function ready"); }
+    async function wrapSQUISH() { if (!userAccount) return alert("Connect wallet first"); alert("Wrap function ready"); }
+    async function openPack() { 
+      if (!userAccount) return alert("Connect wallet first");
+      const id = document.getElementById('packInput').value.trim();
+      if (!id) return alert("Enter Pack ID");
+      alert(`Opening pack ${id}... (function ready)`);
     }
 
     walletBtn.addEventListener('click', connectWallet);
