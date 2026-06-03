@@ -2,50 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SquishEyeZ | On-Chain Utility Hub</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
   <style>
-    :root{
-      --bg:#0a0a0f;
-      --accent-2:#00ff9d;
-      --text:#aaffcc;
-      --muted:#55cc88;
-      --dos-green:#00ff9d;
-      --glow:0 0 .6rem #00ff9d, 0 0 1.4rem rgba(0,255,157,.6);
+    :root {
+      --bg: #0a0a0f;
+      --accent: #00ff9d;
+      --text: #aaffcc;
+      --muted: #55cc88;
+      --dos-green: #00ff9d;
+      --glow: 0 0 .6rem #00ff9d, 0 0 1.4rem rgba(0,255,157,.6);
     }
-    *{box-sizing:border-box}
-    html,body{height:100%; margin:0; background:var(--bg); color:var(--text); font-family:'Courier New', monospace;}
-    .crt:before{content:""; position:fixed; inset:0; z-index:9999; background:repeating-linear-gradient(transparent 0 3px, rgba(0,0,0,.18) 3px 4px); mix-blend-mode:multiply; opacity:.25; pointer-events:none;}
-    .cabinet{max-width:1100px; margin:20px auto; padding:0 12px;}
-    .bezel{background:linear-gradient(145deg, #0a0a12, #020204); border:3px solid #223322; border-radius:12px; padding:14px; box-shadow:0 10px 25px rgba(0,0,0,.7); position:relative; overflow:hidden;}
-    .bezel > *{position:relative; z-index:2;}
-    header{text-align:center; padding:20px 0 10px;}
-    h1{font-family:'Press Start 2P', monospace; color:#ff0037; text-shadow:var(--glow); font-size:clamp(28px, 4vw, 42px); letter-spacing:2px;}
-    .ribbon{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; background:#111811; border:2px solid #334433; padding:10px; border-radius:6px;}
-    .wallet-btn{color:#001100; background:#00ff9d; border:2px solid #00ff9d; padding:12px 24px; font-family:'Press Start 2P'; font-size:13px; cursor:pointer; width:100%; max-width:320px;}
-    section{background:#0f140f; border:3px solid #334433; border-radius:8px; padding:20px; margin:20px 0;}
-    .section-title{display:flex; align-items:center; gap:8px; background:#112211; padding:8px 12px; border-bottom:2px solid #00ff9d; margin-bottom:16px;}
-    .led{width:12px; height:12px; background:#00ff9d; border-radius:50%; box-shadow:0 0 12px #00ff9d; animation:blink 1.2s infinite;}
-    @keyframes blink{50%{opacity:0.3}}
-    .item{background:#111811; border:2px solid #334433; padding:16px; margin-bottom:16px; border-radius:6px;}
-    select, input, button{font-family:'Press Start 2P', monospace; padding:12px; margin:6px 0; background:#001100; color:#00ff9d; border:2px solid #00ff9d; width:100%;}
-    button{cursor:pointer;}
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; background: var(--bg); color: var(--text); font-family: 'Courier New', monospace; }
+    .crt::before { content: ""; position: fixed; inset: 0; z-index: 9999; background: repeating-linear-gradient(transparent 0 3px, rgba(0,0,0,.18) 3px 4px); mix-blend-mode: multiply; opacity: .25; pointer-events: none; }
+    .cabinet { max-width: 1100px; margin: 20px auto; padding: 0 12px; }
+    .bezel { background: linear-gradient(145deg, #0a0a12, #020204); border: 3px solid #223322; border-radius: 12px; padding: 14px; box-shadow: 0 10px 25px rgba(0,0,0,.7); position: relative; overflow: hidden; }
+    header { text-align: center; padding: 20px 0 10px; }
+    h1 { font-family: 'Press Start 2P', monospace; color: #ff0037; text-shadow: var(--glow); font-size: clamp(28px, 4vw, 42px); letter-spacing: 2px; }
+    .ribbon { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; background: #111811; border: 2px solid #334433; padding: 10px; border-radius: 6px; }
+    .wallet-btn { color: #001100; background: #00ff9d; border: 2px solid #00ff9d; padding: 12px 24px; font-family: 'Press Start 2P'; font-size: 13px; cursor: pointer; width: 100%; max-width: 320px; }
+    section { background: #0f140f; border: 3px solid #334433; border-radius: 8px; padding: 20px; margin: 20px 0; }
+    .section-title { display: flex; align-items: center; gap: 8px; background: #112211; padding: 8px 12px; border-bottom: 2px solid #00ff9d; margin-bottom: 16px; }
+    .led { width: 12px; height: 12px; background: #00ff9d; border-radius: 50%; box-shadow: 0 0 12px #00ff9d; animation: blink 1.2s infinite; }
+    @keyframes blink { 50% { opacity: 0.3; } }
+    .item { background: #111811; border: 2px solid #334433; padding: 16px; margin-bottom: 16px; border-radius: 6px; }
+    select, input, button { font-family: 'Press Start 2P', monospace; padding: 12px; margin: 6px 0; background: #001100; color: #00ff9d; border: 2px solid #00ff9d; width: 100%; }
+    button { cursor: pointer; }
+    .status { background: #001100; padding: 14px; text-align: center; border: 2px solid #00ff9d; margin: 20px 0; font-family: 'Press Start 2P'; font-size: 13px; }
   </style>
 </head>
 <body class="crt">
   <div class="cabinet">
     <div class="bezel">
-
       <header>
         <h1>SQUISH EYEZ</h1>
-        <p style="color:#55cc88; font-size:13px;">ON-CHAIN UTILITY HUB</p>
+        <p style="color:#55cc88; font-size:13px;">ON-CHAIN UTILITY HUB • Anchor + Mobile Ready</p>
         <nav class="ribbon">
           <button class="wallet-btn" id="connectWallet">CONNECT WALLET</button>
         </nav>
       </header>
 
-      <div id="wallet-status" style="background:#001100; padding:14px; text-align:center; border:2px solid #00ff9d; margin:20px; font-family:'Press Start 2P'; font-size:13px;">
+      <div id="wallet-status" class="status">
         Wallet not connected
       </div>
 
@@ -59,8 +58,6 @@
             <option value="squish2.exe">squish2.exe — Floppy assets</option>
           </select>
           <button onclick="claimRewards()" style="margin-top:12px;">CLAIM REWARDS</button>
-          <button onclick="stakeAssets()" style="margin-top:8px;">STAKE ASSETS</button>
-          <button onclick="unstakeAssets()" style="margin-top:8px;">UNSTAKE ASSETS</button>
         </div>
       </section>
 
@@ -93,41 +90,6 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@waxio/waxjs@1.0.0/dist-web/waxjs.js"></script>
-  <script>
-    let waxInstance = null;
-    let userAccount = null;
-
-    const walletBtn = document.getElementById('connectWallet');
-    const statusEl = document.getElementById('wallet-status');
-
-    async function connectWallet() {
-      statusEl.innerHTML = "Connecting... Make sure Anchor Desktop is running or use My Cloud Wallet";
-      try {
-        waxInstance = new waxjs.WaxJS({ rpcEndpoint: 'https://wax.greymass.com', tryAutoLogin: true });
-        userAccount = await waxInstance.login();
-        statusEl.innerHTML = `✅ CONNECTED: <strong>${userAccount}</strong>`;
-        statusEl.style.color = '#00ff9d';
-        walletBtn.textContent = `✅ ${userAccount}`;
-      } catch (e) {
-        statusEl.innerHTML = `❌ Connection failed.<br><small>1. Run Anchor Desktop<br>2. Or use My Cloud Wallet at mycloudwallet.io</small>`;
-      }
-    }
-
-    // Basic placeholders - we can expand these once connection works
-    async function claimRewards() { if (!userAccount) return alert("Connect wallet first"); alert("Claim function ready"); }
-    async function stakeAssets() { if (!userAccount) return alert("Connect wallet first"); alert("Stake function ready"); }
-    async function unstakeAssets() { if (!userAccount) return alert("Connect wallet first"); alert("Unstake function ready"); }
-    async function unwrapSQUISH() { if (!userAccount) return alert("Connect wallet first"); alert("Unwrap function ready"); }
-    async function wrapSQUISH() { if (!userAccount) return alert("Connect wallet first"); alert("Wrap function ready"); }
-    async function openPack() { 
-      if (!userAccount) return alert("Connect wallet first");
-      const id = document.getElementById('packInput').value.trim();
-      if (!id) return alert("Enter Pack ID");
-      alert(`Opening pack ${id}... (function ready)`);
-    }
-
-    walletBtn.addEventListener('click', connectWallet);
-  </script>
+  <script type="module" src="/src/main.js"></script>
 </body>
 </html>
