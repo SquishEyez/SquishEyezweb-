@@ -1,0 +1,19 @@
+{
+  "name": "squisheyez-hub",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@wharfkit/session": "^1.4.0",
+    "@wharfkit/wallet-plugin-anchor": "^1.1.0",
+    "@wharfkit/wallet-plugin-cloudwallet": "^1.0.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
