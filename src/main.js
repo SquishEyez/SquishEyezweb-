@@ -30,35 +30,119 @@ async function connectWallet() {
     statusEl.style.color = '#00ff9d'
     walletBtn.textContent = `✅ ${userAccount}`
 
-    console.log('Wallet connected successfully via WharfKit')
+    console.log('Wallet connected successfully')
 
   } catch (error) {
     console.error('Connection error:', error)
-    statusEl.innerHTML = `❌ Connection failed.<br><small>Make sure Anchor Desktop/Mobile is running and try again.<br>Or use My Cloud Wallet.</small>`
+    statusEl.innerHTML = `❌ Connection failed.<br><small>Try Anchor Desktop/Mobile or My Cloud Wallet.</small>`
   }
 }
 
 walletBtn.addEventListener('click', connectWallet)
 
-// Placeholder functions (we'll upgrade these next)
+// ==================== REAL SMART CONTRACT FUNCTIONS ====================
+
+// 1. CLAIM REWARDS from farms.waxdao
 window.claimRewards = async function() {
-  if (!userAccount) return alert('Please connect wallet first')
-  alert('Claim function ready. Real farms.waxdao call coming next.')
+  if (!session || !userAccount) return alert('Please connect wallet first')
+
+  const farm = document.getElementById('farmSelect').value
+
+  if (!confirm(`Claim rewards from farm: ${farm}?`)) return
+
+  try {
+    const result = await session.transact({
+      actions: [{
+        account: 'farms.waxdao',
+        name: 'claim',
+        authorization: [{ actor: userAccount, permission: 'active' }],
+        data: {
+          user: userAccount,
+          farmname: farm
+        }
+      }]
+    }, { blocksBehind: 3, expireSeconds: 30 })
+
+    alert(`✅ Rewards claimed!\nTx: ${result.transaction_id}`)
+  } catch (err) {
+    alert('Claim failed: ' + (err.message || err))
+  }
 }
 
+// 2. UNWRAP $SQUISH (Burn Wrapped NFT → get 69 $SQUISH)
 window.unwrapSQUISH = async function() {
-  if (!userAccount) return alert('Please connect wallet first')
-  alert('Unwrap function ready. Real blend call coming next.')
+  if (!session || !userAccount) return alert('Please connect wallet first')
+
+  if (!confirm('UNWRAP: Burn 1 Wrapped NFT → Receive 69 $SQUISH tokens?')) return
+
+  try {
+    const result = await session.transact({
+      actions: [{
+        account: 'waxdao',
+        name: 'blend',
+        authorization: [{ actor: userAccount, permission: 'active' }],
+        data: {
+          blend_id: 1775,        // Unwrap blend ID
+          owner: userAccount
+        }
+      }]
+    }, { blocksBehind: 3, expireSeconds: 30 })
+
+    alert(`✅ Unwrap successful!\nTx: ${result.transaction_id}`)
+  } catch (err) {
+    alert('Unwrap failed: ' + (err.message || err))
+  }
 }
 
+// 3. WRAP $SQUISH (69 $SQUISH + Diskette → Wrapped NFT)
 window.wrapSQUISH = async function() {
-  if (!userAccount) return alert('Please connect wallet first')
-  alert('Wrap function ready. Real blend call coming next.')
+  if (!session || !userAccount) return alert('Please connect wallet first')
+
+  if (!confirm('WRAP: Send 69 $SQUISH + 1 Diskette NFT → Receive Wrapped NFT?')) return
+
+  try {
+    const result = await session.transact({
+      actions: [{
+        account: 'waxdao',
+        name: 'blend',
+        authorization: [{ actor: userAccount, permission: 'active' }],
+        data: {
+          blend_id: 1718,        // Wrap blend ID
+          owner: userAccount
+        }
+      }]
+    }, { blocksBehind: 3, expireSeconds: 30 })
+
+    alert(`✅ Wrap successful!\nTx: ${result.transaction_id}`)
+  } catch (err) {
+    alert('Wrap failed: ' + (err.message || err))
+  }
 }
 
+// 4. OPEN PACK (Neftyblocks packs)
 window.openPack = async function() {
-  if (!userAccount) return alert('Please connect wallet first')
+  if (!session || !userAccount) return alert('Please connect wallet first')
+
   const packId = document.getElementById('packInput').value.trim()
   if (!packId) return alert('Please enter a Pack Asset ID')
-  alert(`Open Pack ${packId} function ready. Real neftyblocksp call coming next.`)
+
+  if (!confirm(`Open Pack ID: ${packId}?`)) return
+
+  try {
+    const result = await session.transact({
+      actions: [{
+        account: 'neftyblocksp',
+        name: 'open',
+        authorization: [{ actor: userAccount, permission: 'active' }],
+        data: {
+          pack_id: parseInt(packId),
+          owner: userAccount
+        }
+      }]
+    }, { blocksBehind: 3, expireSeconds: 30 })
+
+    alert(`✅ Pack opened successfully!\nTx: ${result.transaction_id}`)
+  } catch (err) {
+    alert('Open pack failed: ' + (err.message || err))
+  }
 }
