@@ -40,7 +40,7 @@ async function connectWallet() {
 
 walletBtn.addEventListener('click', connectWallet)
 
-// Placeholder functions (we'll add real transact() calls next)
+// Placeholder functions (we'll upgrade these next)
 window.claimRewards = async function() {
   if (!userAccount) return alert('Please connect wallet first')
   alert('Claim function ready. Real farms.waxdao call coming next.')
