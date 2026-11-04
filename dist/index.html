@@ -90,5 +90,119 @@
     </div>
   </div>
 
+  <script type="module">
+    import { Session } from 'https://esm.sh/@wharfkit/session@1.6.1'
+    import { WalletPluginAnchor } from 'https://esm.sh/@wharfkit/wallet-plugin-anchor@1.6.1'
+    import { WalletPluginCloudWallet } from 'https://esm.sh/@wharfkit/wallet-plugin-cloudwallet@1.6.5'
+
+    const WAX_CHAIN = {
+      id: '1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4',
+      url: 'https://wax.greymass.com'
+    }
+
+    let session = null
+    let userAccount = null
+
+    const walletBtn = document.getElementById('connectWallet')
+    const statusEl = document.getElementById('wallet-status')
+
+    function showError(message) {
+      console.error(message)
+      statusEl.innerHTML = `❌ ERROR: ${message}<br><small>Check console for more details</small>`
+      statusEl.style.color = '#ff5555'
+      statusEl.style.borderColor = '#ff5555'
+    }
+
+    function updateStatus(html, color = '#00ff9d') {
+      statusEl.innerHTML = html
+      statusEl.style.color = color
+      statusEl.style.borderColor = color
+    }
+
+    async function connectWallet() {
+      updateStatus('Connecting... Please check your wallet app.', '#aaffcc')
+      try {
+        session = new Session({
+          chain: WAX_CHAIN,
+          walletPlugins: [new WalletPluginAnchor(), new WalletPluginCloudWallet()]
+        })
+        const result = await session.login()
+        userAccount = result.account.toString()
+        updateStatus(`✅ CONNECTED: <strong>${userAccount}</strong>`)
+        walletBtn.textContent = `✅ ${userAccount} (click to disconnect)`
+        walletBtn.onclick = disconnectWallet
+      } catch (error) {
+        showError(error.message || 'Unknown error during connection')
+      }
+    }
+
+    async function disconnectWallet() {
+      session = null
+      userAccount = null
+      updateStatus('Wallet not connected')
+      walletBtn.textContent = 'CONNECT WALLET'
+      walletBtn.onclick = connectWallet
+    }
+
+    walletBtn.addEventListener('click', connectWallet)
+
+    async function signAndBroadcast(actions) {
+      if (!session || !userAccount) {
+        showError('Wallet not connected')
+        return null
+      }
+      try {
+        updateStatus('Signing transaction... Check your wallet.', '#aaffcc')
+        const result = await session.transact({ actions })
+        updateStatus(`✅ TX submitted: ${result.response?.transaction_id || 'success'}`)
+        return result
+      } catch (error) {
+        showError(error.message || 'Transaction failed')
+        return null
+      }
+    }
+
+    window.claimRewards = async function() {
+      const farmSelect = document.getElementById('farmSelect')
+      const farmName = farmSelect ? farmSelect.value : 'squish.bat'
+      const actions = [{
+        account: 'farms.waxdao',
+        name: 'claim',
+        authorization: [{ actor: userAccount, permission: 'active' }],
+        data: { user: userAccount, farmname: farmName }
+      }]
+      await signAndBroadcast(actions)
+    }
+
+    window.unwrapSQUISH = async function() {
+      showError('Unwrap: Configure the correct WAXDAO blend action')
+    }
+
+    window.wrapSQUISH = async function() {
+      showError('Wrap: Configure the correct blend/mint action')
+    }
+
+    window.openPack = async function() {
+      const packIdInput = document.getElementById('packInput')
+      const packId = packIdInput ? packIdInput.value.trim() : ''
+      if (!packId || isNaN(packId)) {
+        showError('Please enter a valid Pack NFT Asset ID')
+        return
+      }
+      const actions = [{
+        account: 'atomicassets',
+        name: 'transfer',
+        authorization: [{ actor: userAccount, permission: 'active' }],
+        data: {
+          from: userAccount,
+          to: 'atomicpacksx',
+          asset_ids: [packId],
+          memo: 'unbox'
+        }
+      }]
+      await signAndBroadcast(actions)
+      updateStatus('Pack transfer submitted. After RNG resolves, call claimunboxed if needed.', '#aaffcc')
+    }
+  </script>
 </body>
 </html>
